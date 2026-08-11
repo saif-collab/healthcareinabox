@@ -2,283 +2,104 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Healthcare in a Box</title>
-<style>
-:root{
-  --bg:#0B0D10; --bg2:#11141A; --card:#151922; --card2:#1B2029;
-  --line:#252B36; --line2:#323A48;
-  --txt:#EEF1F6; --txt2:#A7B0BF; --txt3:#6F7A8B;
-  --accent:#4FA3FF; --accent2:#2C7BE5; --good:#3DD68C; --warn:#FFC24B;
-  --radius:14px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  background:var(--bg); color:var(--txt);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased; line-height:1.55;
-}
-button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
-input,textarea,select{font-family:inherit;font-size:14px}
-a{color:var(--accent);text-decoration:none}
-.hide{display:none !important}
 
-/* ---------- shared bits ---------- */
-.btn{
-  display:inline-flex;align-items:center;gap:8px;justify-content:center;
-  background:linear-gradient(180deg,var(--accent),var(--accent2));
-  color:#fff;font-weight:650;font-size:14px;padding:11px 18px;border-radius:10px;
-  transition:.15s; white-space:nowrap;
-}
-.btn:hover{filter:brightness(1.08)}
-.btn.ghost{background:var(--card2);border:1px solid var(--line2);color:var(--txt);font-weight:600}
-.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
-.btn.sm{padding:7px 12px;font-size:13px;border-radius:8px}
-.btn.wide{width:100%}
-.field{width:100%;background:#0E1116;border:1px solid var(--line2);color:var(--txt);
-  padding:11px 13px;border-radius:10px;outline:none;margin-bottom:10px}
-.field:focus{border-color:var(--accent)}
-label.lbl{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.07em;
-  color:var(--txt3);font-weight:700;margin-bottom:6px}
-.muted{color:var(--txt2);font-size:14px}
-.tiny{color:var(--txt3);font-size:12px}
-.pill{display:inline-block;background:var(--card2);border:1px solid var(--line2);
-  color:var(--txt2);font-size:11px;font-weight:700;letter-spacing:.06em;
-  text-transform:uppercase;padding:4px 9px;border-radius:99px}
-.err{color:#FF7B7B;font-size:13px;margin-bottom:10px}
-.ok{color:var(--good);font-size:13px;margin-bottom:10px}
-
-/* ---------- gate ---------- */
-#gate{min-height:100%;display:flex;flex-direction:column;align-items:center;
-  padding:44px 20px 30px;background:
-  radial-gradient(1100px 500px at 50% -8%,rgba(79,163,255,.13),transparent 60%),var(--bg)}
-.brand{display:flex;align-items:center;gap:11px;margin-bottom:8px}
-.mark{width:38px;height:38px;border-radius:10px;flex:0 0 auto;
-  background:linear-gradient(140deg,var(--accent),#7C5CFF);
-  display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff}
-.brand h1{font-size:20px;font-weight:750;letter-spacing:-.2px}
-.gate-sub{color:var(--txt2);font-size:15px;text-align:center;max-width:520px;margin-bottom:30px}
-.gate-wrap{width:100%;max-width:1020px;display:grid;grid-template-columns:1.25fr .95fr;gap:22px}
-@media(max-width:900px){.gate-wrap{grid-template-columns:1fr}}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
-.panel h2{font-size:16px;font-weight:700;margin-bottom:4px}
-.panel .ph{color:var(--txt2);font-size:13.5px;margin-bottom:16px}
-#payFrameBox{border:1px solid var(--line2);border-radius:12px;overflow:hidden;background:#0E1116;min-height:520px}
-#payFrameBox iframe{width:100%;height:520px;border:0;display:block}
-.payPlaceholder{padding:34px 22px;text-align:center;color:var(--txt3);font-size:13.5px}
-.payPlaceholder strong{display:block;color:var(--txt2);font-size:15px;margin-bottom:8px}
-.incl{list-style:none;margin:14px 0 0}
-.incl li{display:flex;gap:9px;align-items:flex-start;color:var(--txt2);font-size:13.5px;padding:5px 0}
-.incl li::before{content:"";width:16px;height:16px;flex:0 0 auto;margin-top:3px;border-radius:50%;
-  background:rgba(61,214,140,.14);box-shadow:inset 0 0 0 1px rgba(61,214,140,.4)}
-.price{display:flex;align-items:baseline;gap:8px;margin:2px 0 4px}
-.price b{font-size:30px;font-weight:780;letter-spacing:-.5px}
-.tabsm{display:flex;gap:6px;background:#0E1116;border:1px solid var(--line2);
-  border-radius:10px;padding:4px;margin-bottom:16px}
-.tabsm button{flex:1;padding:8px;border-radius:7px;font-size:13px;font-weight:650;color:var(--txt2)}
-.tabsm button.on{background:var(--card2);color:var(--txt)}
-#adminLink{margin-top:26px;font-size:12px;color:var(--txt3);border-bottom:1px dashed var(--line2);
-  padding-bottom:1px}
-#adminLink:hover{color:var(--accent);border-color:var(--accent)}
-
-/* ---------- app ---------- */
-#app{display:flex;min-height:100vh}
-aside{width:246px;flex:0 0 246px;background:var(--bg2);border-right:1px solid var(--line);
-  padding:20px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
-aside .brand{margin-bottom:26px}
-nav{display:flex;flex-direction:column;gap:3px}
-nav button{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;
-  color:var(--txt2);font-size:14px;font-weight:600;text-align:left;transition:.13s}
-nav button:hover{background:var(--card);color:var(--txt)}
-nav button.on{background:var(--card2);color:var(--txt)}
-nav button i{width:7px;height:7px;border-radius:50%;background:var(--line2);flex:0 0 auto}
-nav button.on i{background:var(--accent)}
-.asideFoot{margin-top:auto;display:flex;flex-direction:column;gap:8px;padding-top:18px;
-  border-top:1px solid var(--line)}
-.who{font-size:12px;color:var(--txt3);line-height:1.4}
-main{flex:1;padding:30px 34px 70px;max-width:1080px;min-width:0}
-@media(max-width:820px){
-  #app{flex-direction:column}
-  aside{width:100%;flex:none;height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}
-  nav{flex-direction:row;overflow-x:auto}
-  main{padding:22px 18px 60px}
-}
-.pageHead{margin-bottom:24px}
-.pageHead h2{font-size:24px;font-weight:750;letter-spacing:-.4px;margin-bottom:5px}
-.partHead{display:flex;align-items:center;gap:12px;margin:34px 0 14px}
-.partHead:first-of-type{margin-top:6px}
-.partHead h3{font-size:13px;font-weight:750;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3)}
-.partHead div{flex:1;height:1px;background:var(--line)}
-.mod{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  margin-bottom:12px;overflow:hidden}
-.modTop{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer}
-.modTop:hover{background:var(--card2)}
-.modNum{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:var(--card2);
-  border:1px solid var(--line2);display:grid;place-items:center;font-size:13px;font-weight:750;color:var(--txt2)}
-.modTitle{flex:1;min-width:0}
-.modTitle b{display:block;font-size:15px;font-weight:680}
-.modTitle span{font-size:13px;color:var(--txt3)}
-.chev{color:var(--txt3);font-size:12px;flex:0 0 auto}
-.modBody{padding:0 18px 18px;border-top:1px solid var(--line)}
-.vidWrap{margin:16px 0;border-radius:11px;overflow:hidden;background:#0E1116;
-  border:1px solid var(--line2);aspect-ratio:16/9}
-.vidWrap iframe{width:100%;height:100%;border:0;display:block}
-.vidEmpty{aspect-ratio:16/9;display:grid;place-items:center;text-align:center;
-  color:var(--txt3);font-size:13px;background:#0E1116;border:1px dashed var(--line2);
-  border-radius:11px;margin:16px 0;padding:20px}
-.sub{margin-top:16px}
-.sub .lbl{margin-bottom:8px}
-.sub ul{list-style:none}
-.sub ul li{color:var(--txt2);font-size:14px;padding:4px 0 4px 16px;position:relative}
-.sub ul li::before{content:"";position:absolute;left:0;top:11px;width:5px;height:5px;
-  border-radius:50%;background:var(--line2)}
-.promptBox{background:#0E1116;border:1px solid var(--line2);border-radius:11px;padding:14px;margin-top:8px}
-.promptBox pre{white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:12.5px;color:var(--txt2);line-height:1.6}
-.callBox{background:rgba(79,163,255,.07);border:1px solid rgba(79,163,255,.25);
-  border-radius:11px;padding:14px;margin-top:16px}
-.callBox .lbl{color:var(--accent)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:12px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  padding:17px;display:flex;flex-direction:column;gap:9px}
-.card .ico{font-size:22px}
-.card b{font-size:14.5px;font-weight:680}
-.card p{font-size:13px;color:var(--txt3);flex:1}
-.cardRow{display:flex;gap:7px;margin-top:3px}
-.addCard{border:1px dashed var(--line2);background:transparent;display:grid;place-items:center;
-  min-height:150px;color:var(--txt3);font-size:13.5px;font-weight:600;border-radius:var(--radius)}
-.addCard:hover{border-color:var(--accent);color:var(--accent)}
-.catHead{font-size:12px;font-weight:750;letter-spacing:.09em;text-transform:uppercase;
-  color:var(--txt3);margin:26px 0 11px}
-.catHead:first-child{margin-top:0}
-.rowItem{display:flex;align-items:center;gap:14px;background:var(--card);
-  border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:9px}
-.rowItem .ri{flex:1;min-width:0}
-.rowItem .ri b{display:block;font-size:14.5px;font-weight:660}
-.rowItem .ri span{font-size:12.5px;color:var(--txt3)}
-.empty{background:var(--card);border:1px dashed var(--line2);border-radius:var(--radius);
-  padding:34px;text-align:center;color:var(--txt3);font-size:13.5px}
-
-/* ---------- modal ---------- */
-.modalBg{position:fixed;inset:0;background:rgba(5,7,10,.78);display:grid;place-items:center;
-  padding:20px;z-index:80;backdrop-filter:blur(3px)}
-.modal{background:var(--card);border:1px solid var(--line2);border-radius:16px;
-  padding:24px;width:100%;max-width:520px;max-height:88vh;overflow:auto}
-.modal h3{font-size:17px;font-weight:720;margin-bottom:4px}
-.modal .mh{color:var(--txt2);font-size:13.5px;margin-bottom:18px}
-.modalRow{display:flex;gap:9px;margin-top:6px}
-
-/* ---------- admin ---------- */
-#adminBar{position:fixed;left:0;right:0;top:0;z-index:70;
-  background:linear-gradient(90deg,#FFC24B,#FF9A3D);color:#20160A;
-  font-size:12.5px;font-weight:750;padding:7px 16px;display:flex;align-items:center;gap:12px}
-#adminBar span{flex:1}
-#adminBar button{background:rgba(0,0,0,.16);padding:4px 10px;border-radius:7px;font-weight:700;font-size:12px}
-body.adminOn #app{padding-top:32px}
-body.adminOn aside{top:32px;height:calc(100vh - 32px)}
-.adminOnly{display:none}
-body.adminOn .adminOnly{display:inline-flex}
-body.adminOn .adminOnly.blk{display:block}
-.discl{margin-top:34px;padding:15px 17px;background:var(--card);border:1px solid var(--line);
-  border-radius:12px;color:var(--txt3);font-size:12.5px;line-height:1.6}
-</style>
-</head>
-<body>
-
-<!-- ============================================================
-     CONFIG — edit these four lines, that's it
-     ============================================================ -->
+<!-- ==================================================================
+     1. CONFIG  —  the only block you normally need to touch
+     ================================================================== -->
 <script>
 const CONFIG = {
-  BRAND:        "Healthcare in a Box",
-  MARK:         "HB",
-  ADMIN_PASS:   "health-care in a box admin",
+  BRAND:      "Healthcare in a Box",
+  KICKER:     "MEMBER PORTAL",
+  MARK:       "HB",
+  ADMIN_PASS: "health-care in a box admin",
+  ACCESS_CODE:"LAUNCH2026",           // handed out on the Whop confirmation page
+  PRICE_MAIN: "$597",
+  PRICE_SUB:  "then $47/mo"
+};
 
-  // Paste the WAP / Whop / Stripe embed URL here. Leave "" to show a placeholder.
-  PAYMENT_EMBED_URL: "",
+/* ==================================================================
+   WHOP CHECKOUT TEMPLATE
+   To swap the product, change PLAN_ID only. Nothing else.
 
-  // Fallback button if the platform can't be iframed (some block embedding)
-  PAYMENT_LINK_URL:  "",
+   Where to find it:
+     Whop dashboard  >  your plan  >  Checkout links  >  Embed
+     Copy the value inside  data-whop-checkout-plan-id="plan_XXXXXXX"
 
-  // Code you hand out on the payment thank-you page. Required to create an account.
-  ACCESS_CODE:  "LAUNCH2026",
-
-  PRICE_MAIN:   "$597",
-  PRICE_SUB:    "then $47/mo"
+   Set PLAN_ID to "" at any time to show a placeholder instead.
+   ================================================================== */
+const WHOP = {
+  PLAN_ID:   "plan_qQp6dh6JFhBCJ",
+  BG:        "#0b0b12",
+  ACCENT:    "#7c5cff",
+  RADIUS:    "14"
 };
 </script>
 
-<!-- ============================================================
-     DEFAULT_DATA — after using Export site data, paste over this whole block
-     ============================================================ -->
+<!-- ==================================================================
+     2. DEFAULT_DATA  —  after Export site data, paste over this block
+     ================================================================== -->
 <script>
 const DEFAULT_DATA = {
   modules: [
-    { part:"Part 1 — Choose It", n:1, title:"Find Your Lane",
-      sub:"The six services, and which one is actually yours",
-      video:"",
+    { part:"Choose It", n:1, title:"Find Your Lane",
+      sub:"The six services, and which one is actually yours", video:"",
       points:[
         "The six non-medical services: home care, medical transportation, adult day, shared living, respite, community integration",
-        "The four filters: your experience, your budget, your state's requirements, the population you want to serve",
+        "The four filters: your experience, your budget, your state, the population you want to serve",
         "Why almost everyone defaults to home care, and when that's the wrong call",
         "Ruling services out on purpose instead of picking by elimination"
       ],
-      prompt:"I have [X] years of experience as a [role] in [setting]. I live in [state], in [county]. I have roughly [$amount] to invest and I want to be earning [$goal] a month. The population I most want to work with is [population].\n\nCompare these six non-medical healthcare services for my situation: home care, non-emergency medical transportation, adult day services, shared living, respite care, community integration.\n\nFor each one, tell me: how well it fits my experience, roughly how capital intensive it is to start, whether it needs staff from day one, and who typically pays for it. Then rank them best to worst fit for me and explain the top two in detail.\n\nDo not tell me my state's exact licensing requirements. I will verify those directly with the state.",
-      call:"Walk through the six services out loud, one at a time, with a real example of who each one suits. Then have them say which two they're between and why. Do not let them leave the call without narrowing to two."
-    },
-    { part:"Part 1 — Choose It", n:2, title:"Validate the Opportunity",
-      sub:"Who needs it, who pays, who controls the referrals",
-      video:"",
+      prompt:"I have [X] years of experience as a [role] in [setting]. I live in [state], in [county]. I have roughly [$amount] to invest and I want to be earning [$goal] a month. The population I most want to work with is [population].\n\nCompare these six non-medical healthcare services for my situation: home care, non-emergency medical transportation, adult day services, shared living, respite care, community integration.\n\nFor each one tell me: how well it fits my experience, roughly how capital intensive it is to start, whether it needs staff from day one, and who typically pays for it. Then rank them best to worst fit for me and explain the top two in detail.\n\nDo not tell me my state's exact licensing requirements. I will verify those directly with the state.",
+      call:"Walk through the six services out loud, one at a time, with a real example of who each suits. Then have her say which two she's between and why. Do not let her leave the call without narrowing to two." },
+
+    { part:"Choose It", n:2, title:"Validate the Opportunity",
+      sub:"Who needs it, who pays, who controls the referrals", video:"",
       points:[
-        "Finding out whether there's real demand in your county before you spend anything",
+        "Finding out whether there is real demand in your county before you spend anything",
         "Who pays: private pay, Medicaid, VA, contracts, or a mix",
         "Who actually controls the referrals, and why that person matters more than your marketing",
         "Reading local saturation honestly instead of hoping"
       ],
       prompt:"I'm planning to start a [service] business in [county, state]. My intended population is [population].\n\nHelp me build a validation plan. I want to find out: who in my area needs this service, who pays for it, which organizations or roles control the referrals, how many providers already serve this population locally, and what the realistic private-pay rate range is.\n\nGive me a list of specific places to look and specific people to call, plus the exact questions to ask them. Flag anything I should verify with an official source rather than take from you.",
-      call:"Have them name three real referral sources in their county by name, not by category. If they can't, that's the homework before the next call."
-    },
-    { part:"Part 1 — Choose It", n:3, title:"Map the Money",
-      sub:"Startup costs, pricing, and your break-even client count",
-      video:"",
+      call:"Have her name three real referral sources in her county by name, not by category. If she can't, that's the homework before the next call." },
+
+    { part:"Choose It", n:3, title:"Map the Money",
+      sub:"Startup costs, pricing, and your break-even client count", video:"",
       points:[
-        "Choosing your payer model and understanding what each one costs you in cash-flow delay",
+        "Choosing your payer model and what each one costs you in cash-flow delay",
         "Real startup costs versus the ones people forget: insurance, software, background checks",
         "Monthly operating costs before your first dollar comes in",
         "Break-even: exactly how many clients before this replaces your paycheck"
       ],
-      prompt:"I'm starting a [service] business in [state]. My payer model will be [private pay / Medicaid / mixed]. I expect to charge [rate] or be reimbursed at roughly [rate].\n\nBuild me a startup and operating budget. Include formation, insurance, software, background checks, marketing, and any staffing I'd need in month one. Then calculate my monthly break-even and how many clients that equals.\n\nShow the math so I can change the numbers myself. Tell me which of these figures I need to confirm with a real quote rather than an estimate.",
-      call:"Get their actual break-even number said out loud on the call. Most people have never calculated it and the number is usually far smaller and less scary than they assumed."
-    },
+      prompt:"I'm starting a [service] business in [state]. My payer model will be [private pay / Medicaid / mixed]. I expect to charge [rate] or be reimbursed at roughly [rate].\n\nBuild me a startup and operating budget. Include formation, insurance, software, background checks, marketing, and any staffing I'd need in month one. Then calculate my monthly break-even and how many clients that equals.\n\nShow the math so I can change the numbers myself. Tell me which figures I need to confirm with a real quote rather than an estimate.",
+      call:"Get her actual break-even number said out loud on the call. Most people have never calculated it and the number is usually far smaller and less frightening than they assumed." },
 
-    { part:"Part 2 — Build It", n:4, title:"Build the Foundation",
-      sub:"Formation, EIN, banking, insurance, in the right order",
-      video:"",
+    { part:"Build It", n:4, title:"Build the Foundation",
+      sub:"Formation, EIN, banking, insurance, in the right order", video:"",
       points:[
         "Why the LLC is step four and not step one",
         "Entity choice, EIN, and a business bank account that won't cause problems later",
         "General liability and professional liability: what referral partners actually ask to see",
         "The order that means you build once instead of paying twice"
       ],
-      prompt:"I'm forming a [service] business in [state] and I've already chosen my service and confirmed my payer.\n\nGive me a step-by-step setup checklist in the correct order: entity formation, EIN, business banking, insurance types I'll need, and any registrations that apply to a non-medical healthcare service business.\n\nFor each step, tell me what it typically costs, roughly how long it takes, and what it unlocks that I can't do without it. Mark clearly which steps I must confirm with my state or a licensed professional.",
-      call:"Screen-share and do the first two steps live with them. Momentum on this module is worth more than information."
-    },
-    { part:"Part 2 — Build It", n:5, title:"Licensing & Compliance",
-      sub:"Finding and following your state's actual path",
-      video:"",
+      prompt:"I'm forming a [service] business in [state] and I've already chosen my service and confirmed my payer.\n\nGive me a step-by-step setup checklist in the correct order: entity formation, EIN, business banking, insurance types I'll need, and any registrations that apply to a non-medical healthcare service business.\n\nFor each step tell me what it typically costs, roughly how long it takes, and what it unlocks that I can't do without it. Mark clearly which steps I must confirm with my state or a licensed professional.",
+      call:"Screen-share and do the first two steps live with her. Momentum on this module is worth more than information." },
+
+    { part:"Build It", n:5, title:"Licensing & Compliance",
+      sub:"Finding and following your state's actual path", video:"",
       points:[
         "How to find your state's real requirements instead of trusting a Facebook group",
         "Licence, certification, or neither: it depends entirely on service and state",
         "Reading an application before you start filling it in",
         "The most common reasons applications get kicked back"
       ],
-      prompt:"I'm starting a [service] business in [state]. I need to research the licensing or certification path myself from primary sources.\n\nTell me which types of agency or department typically govern this service, what the application process usually involves at a high level, and what documents are commonly required.\n\nThen give me a script for calling the state agency: who to ask for, what to ask, and how to confirm I've got the right requirements for my exact service. Do not give me specific rules, deadlines, or dollar figures for my state. I will get those from the source.",
-      call:"Do not read state requirements to them from memory. Get them on the phone with their state agency during the call if you can. That single phone call is often the whole module."
-    },
-    { part:"Part 2 — Build It", n:6, title:"Install the Box",
-      sub:"Policies, intake, agreements, care plans, systems",
-      video:"",
+      prompt:"I'm starting a [service] business in [state]. I need to research the licensing or certification path myself from primary sources.\n\nTell me which types of agency or department typically govern this service, what the application process usually involves at a high level, and what documents are commonly required.\n\nThen give me a script for calling the state agency: who to ask for, what to ask, and how to confirm I've got the right requirements for my exact service. Do not give me specific rules, deadlines or dollar figures for my state. I will get those from the source.",
+      call:"Do not read state requirements to her from memory. Get her on the phone with her state agency during the call if you can. That single phone call is often the whole module." },
+
+    { part:"Build It", n:6, title:"Install the Box",
+      sub:"Policies, intake, agreements, care plans, systems", video:"",
       points:[
         "Customizing the document set to your one service instead of using it generic",
         "Intake forms, client agreements, assessments and care plans",
@@ -286,24 +107,21 @@ const DEFAULT_DATA = {
         "Scheduling, documentation and billing: an operating system, not a folder"
       ],
       prompt:"I run a [service] business in [state] serving [population]. I have a set of template policies, intake forms, client agreements, care plans and employee documents.\n\nAct as an operations reviewer. For each document type, tell me what needs to change to be specific to my service and my population rather than generic. Ask me questions where you need information from me.\n\nThen give me an order to work through them in, starting with the ones I'd need first to take on a single client.",
-      call:"Pick one document and customize it together on the call. They'll do the other twelve themselves once they've seen how one is done."
-    },
+      call:"Pick one document and customize it together on the call. She'll do the other twelve herself once she's seen how one is done." },
 
-    { part:"Part 3 — Fill It", n:7, title:"Become Referral-Ready",
-      sub:"What a case manager needs to see before they'll place with you",
-      video:"",
+    { part:"Fill It", n:7, title:"Become Referral-Ready",
+      sub:"What a case manager needs before they'll place with you", video:"",
       points:[
         "Your service and population statement in one sentence",
         "The referral packet and the capacity sheet",
         "A defined intake process and a response-time standard you actually hold to",
         "Why response time beats marketing every single time"
       ],
-      prompt:"I run a [service] business in [county, state] serving [population]. I have capacity for [number] clients right now.\n\nHelp me build a referral packet. I need: a one-sentence service and population statement, a one-page overview a case manager could scan in 30 seconds, a capacity sheet, my intake process written out, and a response-time commitment.\n\nThen write me three outreach scripts: one for a phone call, one for an in-person drop-in, and one for email. Professional, short, no salesy language.",
-      call:"Have them read their one-sentence statement out loud. If it takes more than one breath, it's not done."
-    },
-    { part:"Part 3 — Fill It", n:8, title:"Pursue the First Client",
-      sub:"A weekly plan, not waiting by the phone",
-      video:"",
+      prompt:"I run a [service] business in [county, state] serving [population]. I have capacity for [number] clients right now.\n\nHelp me build a referral packet. I need: a one-sentence service and population statement, a one-page overview a case manager could scan in 30 seconds, a capacity sheet, my intake process written out, and a response-time commitment.\n\nThen write me three outreach scripts: one for a phone call, one for an in-person drop-in, one for email. Professional, short, no salesy language.",
+      call:"Have her read her one-sentence statement out loud. If it takes more than one breath, it isn't done." },
+
+    { part:"Fill It", n:8, title:"Pursue the First Client",
+      sub:"A weekly plan, not waiting by the phone", video:"",
       points:[
         "Building your referral source list and working it weekly",
         "Outreach, follow-up, and tracking every conversation",
@@ -311,8 +129,7 @@ const DEFAULT_DATA = {
         "Refining the offer off real feedback instead of guessing"
       ],
       prompt:"I'm ready to take clients for my [service] business in [county, state]. My referral sources are [list them].\n\nBuild me a weekly client acquisition plan: how many outreach contacts, how many follow-ups, which events to attend, and what to track. Assume I'm still working [hours] a week at my job, so it has to be realistic.\n\nThen build me a simple tracker layout: what columns I need to log every conversation and know what to do next.",
-      call:"Set their weekly contact number together and write it down. Then hold them to it on every future call. This is the module where people quietly stop, so the accountability matters more than the content."
-    }
+      call:"Set her weekly contact number together and write it down. Then hold her to it on every future call. This is the module where people quietly stop, so accountability matters more than content." }
   ],
 
   recordings: [],
@@ -330,428 +147,762 @@ const DEFAULT_DATA = {
 
   calls: [],
 
-  community: {
-    phone:"", slack:"", booking:"",
-    note:"Support Monday to Wednesday, 10am to 4pm."
-  }
+  community: { phone:"", slack:"", booking:"",
+    note:"Support Monday to Wednesday, 10am to 4pm." }
 };
 </script>
 
-<!-- ============================================================ -->
+<style>
+/* ---------- tokens ---------- */
+:root{
+  --bg:#0B0B12; --panel:#111119; --card:#16161F; --card2:#1C1C27;
+  --line:#242430; --line2:#30303E;
+  --vio:#7C5CFF; --vio2:#5B3FD9; --lilac:#BFAEFF;
+  --txt:#ECEBF5; --muted:#9C9AB0; --dim:#66647A;
+  --good:#3DD68C; --gold:#E0A83A;
+  --grad:linear-gradient(135deg,#7C5CFF,#5B3FD9);
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+*::-webkit-scrollbar{width:11px;height:11px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:#2A2A38;border-radius:20px;border:3px solid var(--bg)}
+html,body{height:100%}
+body{background:var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased;line-height:1.55;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,textarea{font-family:inherit}
+a{color:var(--lilac);text-decoration:none}
+.hide{display:none !important}
 
-<div id="adminBar" class="hide">
-  <span>ADMIN MODE — your edits save to this browser only. Hit Export site data when you're done, then paste it over the DEFAULT_DATA block in the file.</span>
-  <button onclick="exportData()">Export site data</button>
-  <button onclick="exitAdmin()">Exit</button>
-</div>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.up{animation:fadeUp .5s cubic-bezier(.2,.7,.3,1) both}
 
-<!-- ---------------- GATE ---------------- -->
+/* ---------- cursor FX ---------- */
+#orb,#orb2{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;
+  mix-blend-mode:screen;will-change:transform;opacity:0;transition:opacity .4s}
+#orb{width:420px;height:420px;margin:-210px 0 0 -210px;
+  background:radial-gradient(circle,rgba(124,92,255,.16),rgba(124,92,255,.05) 42%,transparent 68%);
+  filter:blur(14px)}
+#orb2{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;background:var(--lilac);
+  box-shadow:0 0 16px 3px rgba(124,92,255,.75)}
+body.fx #orb,body.fx #orb2{opacity:1}
+
+/* spotlight surface: put class="fx" on any card */
+.fx{position:relative;isolation:isolate}
+.fx::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  opacity:0;transition:opacity .3s;z-index:1;
+  background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),
+    rgba(124,92,255,.11),transparent 42%)}
+.fx:hover::after{opacity:1}
+.fx>*{position:relative;z-index:2}
+
+@media(prefers-reduced-motion:reduce){
+  #orb,#orb2{display:none}
+  .fx::after{display:none}
+  .up{animation:none}
+}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--grad);color:#fff;font-weight:680;font-size:14px;padding:12px 20px;
+  border-radius:11px;letter-spacing:.1px;position:relative;overflow:hidden;
+  box-shadow:0 8px 22px rgba(124,92,255,.24);
+  transition:transform .12s,box-shadow .2s,filter .2s}
+.btn::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.24),transparent 70%);
+  transform:translateX(-120%);transition:transform .55s}
+.btn:hover{transform:translateY(-1.5px);box-shadow:0 12px 30px rgba(124,92,255,.34);filter:brightness(1.06)}
+.btn:hover::before{transform:translateX(120%)}
+.btn:active{transform:translateY(0) scale(.985)}
+.btn.wide{width:100%}
+.btn.sm{padding:8px 14px;font-size:13px;border-radius:9px;box-shadow:none}
+.btn.ghost{background:var(--card2);border:1px solid var(--line2);color:var(--muted);
+  box-shadow:none;font-weight:620}
+.btn.ghost::before{display:none}
+.btn.ghost:hover{color:#fff;border-color:var(--vio);background:var(--card2)}
+
+.field{width:100%;background:#0D0D14;border:1px solid var(--line2);border-radius:11px;
+  padding:12px 14px;color:var(--txt);font-size:14px;outline:none;
+  transition:border-color .16s,box-shadow .16s}
+.field:focus{border-color:var(--vio);box-shadow:0 0 0 3px rgba(124,92,255,.13)}
+textarea.field{min-height:76px;resize:vertical}
+.lbl{display:block;font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--dim);font-weight:750;margin:14px 0 6px}
+.lbl:first-child{margin-top:0}
+.kicker{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--vio);font-weight:800}
+.muted{color:var(--muted);font-size:14px}
+.tiny{color:var(--dim);font-size:12px}
+.pill{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.09em;
+  text-transform:uppercase;padding:4px 9px;border-radius:99px;
+  background:var(--card2);border:1px solid var(--line2);color:var(--dim)}
+.pill.on{color:var(--good);border-color:rgba(61,214,140,.35);background:rgba(61,214,140,.1)}
+.err{color:#FF8080;font-size:13px;margin-bottom:10px}
+
+/* ================= GATE ================= */
+#gate{min-height:100vh;display:flex;flex-direction:column;padding:0 22px 40px;
+  background:
+    radial-gradient(880px 520px at 12% -12%,rgba(124,92,255,.20),transparent 62%),
+    radial-gradient(760px 560px at 108% 108%,rgba(91,63,217,.20),transparent 58%),
+    var(--bg)}
+.gwrap{width:100%;max-width:1120px;margin:0 auto}
+.gtop{display:flex;align-items:center;justify-content:space-between;padding:26px 0 0}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:38px;height:38px;flex:0 0 auto;border-radius:11px;background:var(--grad);
+  display:grid;place-items:center;font-weight:800;font-size:14px;color:#fff;
+  box-shadow:0 8px 22px rgba(124,92,255,.34)}
+.brand .bt b{display:block;font-size:15.5px;font-weight:720;letter-spacing:-.2px;line-height:1.25}
+.brand .bt span{display:block;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);font-weight:750}
+.gmain{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;padding:52px 0 0}
+@media(max-width:960px){.gmain{grid-template-columns:1fr;gap:34px;padding-top:34px}}
+.gleft h1{font-size:44px;line-height:1.08;letter-spacing:-1.4px;font-weight:800;margin:14px 0 16px;
+  background:linear-gradient(180deg,#fff,#A9A6C4);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent}
+@media(max-width:600px){.gleft h1{font-size:33px;letter-spacing:-.9px}}
+.gleft .lede{color:var(--muted);font-size:16px;max-width:470px}
+.incl{list-style:none;margin:28px 0 0;max-width:470px}
+.incl li{display:flex;gap:12px;align-items:flex-start;color:var(--muted);font-size:14.5px;padding:9px 0;
+  border-top:1px solid var(--line)}
+.incl li:first-child{border-top:0}
+.incl li i{width:19px;height:19px;flex:0 0 auto;margin-top:2px;border-radius:6px;
+  background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.34);
+  display:grid;place-items:center;font-size:11px;font-style:normal;color:var(--lilac);font-weight:800}
+.priceRow{display:flex;align-items:baseline;gap:10px;margin-top:30px}
+.priceRow b{font-size:38px;font-weight:800;letter-spacing:-1.2px}
+.gcard{background:linear-gradient(180deg,#15151E,#0F0F16);border:1px solid var(--line2);
+  border-radius:20px;padding:24px;position:relative;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.gcard::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+.gcard h2{font-size:17px;font-weight:730;margin-bottom:4px}
+.gcard .ph{color:var(--muted);font-size:13.5px;margin-bottom:18px}
+#whopMount{border-radius:14px;overflow:hidden;min-height:120px}
+.payPh{padding:40px 22px;text-align:center;border:1px dashed var(--line2);border-radius:14px;
+  color:var(--dim);font-size:13px}
+.payPh strong{display:block;color:var(--muted);font-size:14.5px;margin-bottom:9px}
+.sep{display:flex;align-items:center;gap:12px;margin:22px 0 18px;color:var(--dim);font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;font-weight:750}
+.sep div{flex:1;height:1px;background:var(--line)}
+.tabsm{display:flex;gap:5px;background:#0D0D14;border:1px solid var(--line2);border-radius:11px;
+  padding:4px;margin-bottom:16px}
+.tabsm button{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:660;color:var(--muted);transition:.15s}
+.tabsm button.on{background:var(--card2);color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+#adminLink{display:block;margin:30px auto 0;font-size:12px;color:var(--dim);
+  border-bottom:1px dashed var(--line2);padding-bottom:1px;transition:.16s}
+#adminLink:hover{color:var(--lilac);border-color:var(--vio)}
+
+/* ================= APP ================= */
+#app{display:flex;min-height:100vh;
+  background:
+    radial-gradient(1100px 620px at 104% -6%,rgba(124,92,255,.07),transparent 56%),
+    radial-gradient(900px 700px at -8% 108%,rgba(91,63,217,.08),transparent 52%),
+    var(--bg)}
+aside{width:252px;flex:0 0 252px;background:linear-gradient(180deg,#12121A,#0E0E15);
+  border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh}
+aside .brand{margin-bottom:26px;padding:0 4px}
+nav{display:flex;flex-direction:column;gap:3px}
+.navi{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:11px;
+  color:var(--muted);font-size:14px;font-weight:580;position:relative;text-align:left;
+  transition:background .16s,color .16s}
+.navi svg{width:18px;height:18px;flex:0 0 auto;opacity:.8;transition:.16s}
+.navi:hover{background:var(--card);color:var(--txt)}
+.navi.on{background:linear-gradient(90deg,rgba(124,92,255,.17),rgba(124,92,255,.02));color:#fff}
+.navi.on::before{content:"";position:absolute;left:-16px;top:50%;transform:translateY(-50%);
+  width:3px;height:20px;border-radius:0 3px 3px 0;background:var(--vio);
+  box-shadow:0 0 12px var(--vio)}
+.navi.on svg{opacity:1;color:var(--lilac)}
+.prog{margin:22px 4px 0;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:13px}
+.prog .pt{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.prog .pt span{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:780}
+.prog .pt b{font-size:13px;color:var(--lilac)}
+.bar{height:5px;border-radius:99px;background:#0D0D14;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--grad);border-radius:99px;transition:width .5s cubic-bezier(.2,.7,.3,1)}
+.sfoot{margin-top:auto;padding-top:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
+.who{display:flex;align-items:center;gap:10px;padding:0 4px}
+.who .av{width:34px;height:34px;flex:0 0 auto;border-radius:10px;background:var(--grad);
+  display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff}
+.who .wt{min-width:0}
+.who .wt b{display:block;font-size:13px;font-weight:640;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who .wt span{display:block;font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+main{flex:1;padding:34px 40px 80px;max-width:1060px;min-width:0}
+.phead{margin-bottom:26px}
+.phead h2{font-size:31px;letter-spacing:-.9px;font-weight:800;margin:8px 0 8px;
+  background:linear-gradient(180deg,#fff,#B4B1CC);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent}
+.phead p{color:var(--muted);font-size:14.5px;max-width:620px}
+
+.partband{display:flex;align-items:center;gap:13px;margin:36px 0 15px}
+.partband:first-of-type{margin-top:4px}
+.partband .pn{font-size:10.5px;font-weight:850;letter-spacing:.12em;color:#0B0B12;
+  background:var(--lilac);padding:4px 10px;border-radius:7px;text-transform:uppercase}
+.partband .pl{font-size:13px;color:var(--muted);font-weight:600}
+.partband .ln{flex:1;height:1px;background:var(--line)}
+
+.mod{background:linear-gradient(180deg,#16161F,#12121A);border:1px solid var(--line);
+  border-radius:16px;margin-bottom:12px;overflow:hidden;
+  transition:border-color .2s,box-shadow .2s,transform .16s}
+.mod:hover{border-color:var(--line2);box-shadow:0 14px 40px rgba(0,0,0,.34);transform:translateY(-2px)}
+.mod.open{border-color:rgba(124,92,255,.4);box-shadow:0 18px 50px rgba(124,92,255,.1)}
+.mhead{display:flex;align-items:center;gap:15px;padding:17px 19px;cursor:pointer;user-select:none}
+.mno{font-size:10.5px;font-weight:850;letter-spacing:.11em;color:var(--vio);flex:0 0 auto;width:70px}
+.mtitle{flex:1;min-width:0}
+.mtitle b{display:block;font-size:15.5px;font-weight:670;letter-spacing:-.15px}
+.mtitle span{display:block;font-size:13px;color:var(--dim);margin-top:1px}
+.chev{width:16px;height:16px;color:var(--dim);flex:0 0 auto;transition:transform .25s}
+.mod.open .chev{transform:rotate(180deg)}
+.mbody{padding:2px 20px 22px;border-top:1px solid var(--line);animation:fadeIn .3s both}
+.mbody h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lilac);
+  font-weight:800;margin:20px 0 9px}
+.vwrap{margin:16px 0 4px;border-radius:13px;overflow:hidden;border:1px solid var(--line2);
+  background:#000;aspect-ratio:16/9}
+.vwrap iframe{width:100%;height:100%;border:0;display:block}
+.vempty{aspect-ratio:16/9;border:1px dashed var(--line2);border-radius:13px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:7px;color:var(--dim);
+  margin:16px 0 4px;text-align:center;padding:18px;font-size:13px;background:#0D0D14}
+.plist{list-style:none}
+.plist li{color:var(--muted);font-size:14px;padding:5px 0 5px 18px;position:relative}
+.plist li::before{content:"";position:absolute;left:0;top:12px;width:6px;height:6px;
+  border-radius:50%;background:var(--vio);opacity:.65}
+.prompt{background:#0A0A10;border:1px solid var(--line2);border-radius:13px;padding:16px;
+  margin-top:9px;position:relative}
+.prompt pre{white-space:pre-wrap;word-break:break-word;font-size:12.5px;line-height:1.65;
+  color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;padding-right:78px}
+.copy{position:absolute;top:13px;right:13px;font-size:11px;color:var(--muted);
+  border:1px solid var(--line2);padding:6px 11px;border-radius:8px;background:var(--card);transition:.15s}
+.copy:hover{color:#fff;border-color:var(--vio)}
+.callbox{background:linear-gradient(180deg,rgba(124,92,255,.09),rgba(124,92,255,.03));
+  border:1px solid rgba(124,92,255,.26);border-radius:13px;padding:16px;margin-top:20px}
+.doneRow{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:13px}
+.asset{background:linear-gradient(180deg,#16161F,#12121A);border:1px solid var(--line);
+  border-radius:15px;padding:17px;display:flex;flex-direction:column;gap:10px;min-height:150px;
+  transition:border-color .18s,transform .16s,box-shadow .18s}
+.asset:hover{border-color:var(--line2);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.36)}
+.asset .ic{width:42px;height:42px;border-radius:11px;font-size:20px;
+  background:linear-gradient(140deg,#1F1F2C,#17171F);border:1px solid var(--line2);
+  display:grid;place-items:center}
+.asset b{font-size:14.5px;font-weight:670}
+.asset p{font-size:12.5px;color:var(--dim);flex:1;line-height:1.55}
+.arow{display:flex;gap:7px;align-items:center}
+.addcard{border:1px dashed var(--line2);border-radius:15px;background:transparent;min-height:150px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  color:var(--dim);font-size:13px;font-weight:620;transition:.18s}
+.addcard:hover{border-color:var(--vio);color:var(--lilac)}
+.addcard .plus{width:34px;height:34px;border-radius:50%;border:1.5px solid currentColor;
+  display:grid;place-items:center;font-size:20px;font-weight:300}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{font-size:12.5px;color:var(--muted);border:1px solid var(--line2);padding:7px 15px;
+  border-radius:99px;transition:.15s}
+.chip:hover{color:#fff;border-color:var(--line2)}
+.chip.on{background:var(--card2);color:#fff;border-color:var(--vio)}
+
+.row{display:flex;align-items:center;gap:15px;background:linear-gradient(180deg,#16161F,#12121A);
+  border:1px solid var(--line);border-radius:14px;padding:15px 17px;margin-bottom:10px;
+  transition:border-color .18s}
+.row:hover{border-color:var(--line2)}
+.row .rt{flex:1;min-width:0}
+.row .rt b{display:block;font-size:14.5px;font-weight:650}
+.row .rt span{font-size:12.5px;color:var(--dim)}
+.dbox{flex:0 0 auto;width:54px;text-align:center;background:var(--card2);border:1px solid var(--line2);
+  border-radius:10px;padding:7px 0}
+.dbox .m{font-size:9.5px;text-transform:uppercase;color:var(--lilac);font-weight:850;letter-spacing:.06em}
+.dbox .d{font-size:19px;font-weight:800;line-height:1.05}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:760px){.cgrid{grid-template-columns:1fr}}
+.cbox{background:linear-gradient(180deg,#16161F,#12121A);border:1px solid var(--line);
+  border-radius:17px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.24)}
+.cbox h3{font-size:14.5px;font-weight:700;margin-bottom:6px}
+.cbox .cs{color:var(--dim);font-size:13px;margin-bottom:16px}
+.empty{border:1px dashed var(--line2);border-radius:var(--r);padding:36px;text-align:center;
+  color:var(--dim);font-size:13.5px}
+.discl{margin-top:38px;padding:17px 19px;background:var(--card);border:1px solid var(--line);
+  border-radius:13px;color:var(--dim);font-size:12.5px;line-height:1.7}
+.discl b{color:var(--muted)}
+
+/* admin */
+#abar{display:none;align-items:center;gap:11px;margin-bottom:24px;padding:12px 16px;
+  background:linear-gradient(90deg,rgba(224,168,58,.15),transparent);
+  border:1px solid rgba(224,168,58,.3);border-radius:12px;font-size:12.5px;color:#EBCB90}
+body.admin #abar{display:flex}
+#abar .sp{flex:1}
+#abar button{font-size:11.5px;color:#14100A;background:var(--gold);font-weight:780;
+  padding:6px 12px;border-radius:8px}
+.adm{display:none}
+body.admin .adm{display:inline-flex}
+body.admin .adm.blk{display:flex}
+
+/* modal + toast */
+.mbg{position:fixed;inset:0;background:rgba(4,4,8,.76);display:grid;place-items:center;
+  padding:20px;z-index:200;backdrop-filter:blur(4px);animation:fadeIn .2s both}
+.msheet{width:100%;max-width:470px;background:var(--panel);border:1px solid var(--line2);
+  border-radius:18px;padding:26px;max-height:88vh;overflow:auto;
+  box-shadow:0 40px 100px rgba(0,0,0,.7);animation:fadeUp .3s both}
+.msheet h3{font-size:18px;font-weight:730;margin-bottom:4px}
+.msheet .ms{color:var(--muted);font-size:13.5px;margin-bottom:8px}
+.mrow{display:flex;gap:10px;margin-top:22px}
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#1E1E2A;border:1px solid var(--line2);color:#fff;padding:12px 22px;border-radius:12px;
+  font-size:13.5px;opacity:0;pointer-events:none;transition:.28s;z-index:300;
+  box-shadow:0 16px 44px rgba(0,0,0,.55)}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* mobile */
+.mtop,.mtabs{display:none}
+@media(max-width:820px){
+  aside{display:none}
+  main{padding:20px 17px 92px;max-width:100%}
+  .mtop{display:flex;align-items:center;gap:11px;position:sticky;top:0;z-index:40;
+    background:var(--panel);border-bottom:1px solid var(--line);padding:13px 16px}
+  .mtop .mark{width:29px;height:29px;border-radius:8px;font-size:11px}
+  .mtop b{font-size:13.5px;flex:1}
+  .mtabs{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:40;
+    background:var(--panel);border-top:1px solid var(--line)}
+  .mtabs button{flex:1;padding:11px 4px 10px;display:flex;flex-direction:column;align-items:center;
+    gap:4px;color:var(--dim);font-size:10px;font-weight:650}
+  .mtabs button svg{width:19px;height:19px}
+  .mtabs button.on{color:var(--lilac)}
+  .phead h2{font-size:25px}
+}
+</style>
+</head>
+<body>
+
+<div id="orb"></div><div id="orb2"></div>
+<div id="toast"></div>
+
+<!-- ================= GATE ================= -->
 <div id="gate">
-  <div class="brand">
-    <div class="mark" id="gMark">HB</div>
-    <h1 id="gBrand">Healthcare in a Box</h1>
-  </div>
-  <p class="gate-sub">Choose the right non-medical healthcare business, build it in the correct order, and get ready for your first client.</p>
-
-  <div class="gate-wrap">
-    <div class="panel">
-      <h2>Get access</h2>
-      <p class="ph">Complete your enrolment below. You'll get your access code on the confirmation page.</p>
-      <div id="payFrameBox"></div>
+  <div class="gwrap">
+    <div class="gtop">
+      <div class="brand">
+        <div class="mark" id="gMark">HB</div>
+        <div class="bt"><b id="gBrand">Healthcare in a Box</b><span id="gKick">Member Portal</span></div>
+      </div>
+      <span class="pill">Enrolment open</span>
     </div>
 
-    <div class="panel">
-      <div class="price"><b id="pMain">$597</b><span class="muted" id="pSub">then $47/mo</span></div>
-      <ul class="incl">
-        <li>8 modules across 3 parts, start to first client</li>
-        <li>Every document, policy, form and care plan template</li>
-        <li>A 1:1 roadmap call to map your lane and your state</li>
-        <li>Biweekly group coaching calls</li>
-        <li>The community and 1:1 support</li>
-      </ul>
-
-      <div style="height:1px;background:var(--line);margin:20px 0"></div>
-
-      <div class="tabsm">
-        <button id="tabLogin" class="on" onclick="gateTab('login')">Log in</button>
-        <button id="tabSignup" onclick="gateTab('signup')">Create account</button>
+    <div class="gmain">
+      <div class="gleft up">
+        <span class="kicker">For experienced caregivers</span>
+        <h1>Stop guessing which<br>business to build.</h1>
+        <p class="lede">Pick the right non-medical healthcare service for your experience and your state, build it in the correct order, and get ready for your first client.</p>
+        <ul class="incl">
+          <li><i>1</i><span>8 modules across 3 parts, from choosing your lane to signing your first client</span></li>
+          <li><i>2</i><span>Every document: policies, intake forms, agreements, care plans</span></li>
+          <li><i>3</i><span>A 1:1 roadmap call to map your service and your state</span></li>
+          <li><i>4</i><span>Biweekly group coaching, the community, and 1:1 support</span></li>
+        </ul>
+        <div class="priceRow"><b id="pMain">$597</b><span class="muted" id="pSub">then $47/mo</span></div>
       </div>
 
-      <div id="paneLogin">
-        <div id="loginErr"></div>
-        <label class="lbl">Email</label>
-        <input class="field" id="liEmail" type="email" autocomplete="email" placeholder="you@email.com">
-        <label class="lbl">Password</label>
-        <input class="field" id="liPass" type="password" autocomplete="current-password" placeholder="••••••••">
-        <button class="btn wide" onclick="doLogin()">Log in</button>
-      </div>
+      <div class="gcard fx up" style="animation-delay:.08s">
+        <h2>Get access</h2>
+        <p class="ph">Complete enrolment below. Your access code is on the confirmation page.</p>
+        <div id="whopMount"></div>
 
-      <div id="paneSignup" class="hide">
-        <div id="suErr"></div>
-        <label class="lbl">Access code</label>
-        <input class="field" id="suCode" placeholder="From your confirmation page">
-        <label class="lbl">Full name</label>
-        <input class="field" id="suName" placeholder="Jane Smith">
-        <label class="lbl">Email</label>
-        <input class="field" id="suEmail" type="email" placeholder="you@email.com">
-        <label class="lbl">Password</label>
-        <input class="field" id="suPass" type="password" placeholder="At least 8 characters">
-        <button class="btn wide" onclick="doSignup()">Create my account</button>
+        <div class="sep"><div></div>Already paid?<div></div></div>
+
+        <div class="tabsm">
+          <button id="tabL" class="on" onclick="gtab(1)">Log in</button>
+          <button id="tabS" onclick="gtab(0)">Create account</button>
+        </div>
+
+        <div id="paneL">
+          <div id="eL"></div>
+          <label class="lbl">Email</label>
+          <input class="field" id="liE" type="email" autocomplete="email" placeholder="you@email.com">
+          <label class="lbl">Password</label>
+          <input class="field" id="liP" type="password" autocomplete="current-password" placeholder="••••••••">
+          <div style="height:16px"></div>
+          <button class="btn wide" onclick="doLogin()">Log in</button>
+        </div>
+
+        <div id="paneS" class="hide">
+          <div id="eS"></div>
+          <label class="lbl">Access code</label>
+          <input class="field" id="suC" placeholder="From your confirmation page">
+          <label class="lbl">Full name</label>
+          <input class="field" id="suN" placeholder="Jane Smith">
+          <label class="lbl">Email</label>
+          <input class="field" id="suE" type="email" placeholder="you@email.com">
+          <label class="lbl">Password</label>
+          <input class="field" id="suP" type="password" placeholder="At least 8 characters">
+          <div style="height:16px"></div>
+          <button class="btn wide" onclick="doSignup()">Create my account</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <button id="adminLink" onclick="askAdmin()">Admin mode</button>
+    <button id="adminLink" onclick="askAdmin()">Admin mode</button>
+  </div>
 </div>
 
-<!-- ---------------- APP ---------------- -->
+<!-- ================= APP ================= -->
 <div id="app" class="hide">
   <aside>
     <div class="brand">
       <div class="mark" id="aMark">HB</div>
-      <h1 id="aBrand" style="font-size:15px">Healthcare in a Box</h1>
+      <div class="bt"><b id="aBrand">Healthcare in a Box</b><span id="aKick">Member Portal</span></div>
     </div>
     <nav>
-      <button class="on" data-t="modules" onclick="go('modules')"><i></i>Modules</button>
-      <button data-t="recordings" onclick="go('recordings')"><i></i>Recordings</button>
-      <button data-t="assets" onclick="go('assets')"><i></i>Assets</button>
-      <button data-t="community" onclick="go('community')"><i></i>Community</button>
+      <button class="navi on" data-t="modules" onclick="go('modules')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Modules</button>
+      <button class="navi" data-t="recordings" onclick="go('recordings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m10 8 6 4-6 4V8z"/><rect x="3" y="4" width="18" height="16" rx="3"/></svg>Recordings</button>
+      <button class="navi" data-t="assets" onclick="go('assets')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/></svg>Assets</button>
+      <button class="navi" data-t="community" onclick="go('community')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 7a3 3 0 0 1 0 6M18 20a5 5 0 0 0-2-4"/></svg>Community</button>
     </nav>
-    <div class="asideFoot">
-      <div class="who" id="whoAmI"></div>
+
+    <div class="prog">
+      <div class="pt"><span>Progress</span><b id="progTxt">0 / 8</b></div>
+      <div class="bar"><i id="progBar" style="width:0%"></i></div>
+    </div>
+
+    <div class="sfoot">
+      <div class="who"><div class="av" id="avI">?</div>
+        <div class="wt"><b id="whoN"></b><span id="whoE"></span></div></div>
       <button class="btn ghost sm" onclick="logout()">Log out</button>
     </div>
   </aside>
-  <main id="view"></main>
+
+  <div style="flex:1;min-width:0">
+    <div class="mtop">
+      <div class="mark" id="mMark">HB</div><b id="mBrand">Healthcare in a Box</b>
+      <button class="tiny" onclick="logout()">Log out</button>
+    </div>
+    <main id="view"></main>
+  </div>
+
+  <div class="mtabs">
+    <button class="on" data-t="modules" onclick="go('modules')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Modules</button>
+    <button data-t="recordings" onclick="go('recordings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m10 8 6 4-6 4V8z"/><rect x="3" y="4" width="18" height="16" rx="3"/></svg>Calls</button>
+    <button data-t="assets" onclick="go('assets')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/></svg>Assets</button>
+    <button data-t="community" onclick="go('community')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/></svg>Community</button>
+  </div>
 </div>
 
 <div id="modalHost"></div>
 
+<!-- Whop checkout mount: built from the WHOP template above -->
+<script>
+(function(){
+  var m=document.getElementById('whopMount');
+  if(WHOP.PLAN_ID){
+    var d=document.createElement('div');
+    d.setAttribute('data-whop-checkout-plan-id', WHOP.PLAN_ID);
+    d.setAttribute('data-whop-checkout-theme-background-color', WHOP.BG);
+    d.setAttribute('data-whop-checkout-theme-accent-color', WHOP.ACCENT);
+    d.setAttribute('data-whop-checkout-theme-border-radius', WHOP.RADIUS);
+    m.appendChild(d);
+  } else {
+    m.innerHTML='<div class="payPh"><strong>Checkout goes here</strong>'+
+      'Open this file, find the WHOP block at the top, and paste your plan ID into PLAN_ID.</div>';
+  }
+})();
+</script>
+<script async src="https://js.whop.com/static/checkout/loader.js"></script>
+
 <script>
 /* ================= state ================= */
-const LS_DATA='hbx_data_v1', LS_USERS='hbx_users_v1', LS_SESS='hbx_sess_v1';
-let DATA = load(LS_DATA) || JSON.parse(JSON.stringify(DEFAULT_DATA));
-let USERS = load(LS_USERS) || [];
-let isAdmin = false, tab='modules', openMod=null;
+const K={d:'hbx_d1',u:'hbx_u1',s:'hbx_s1',p:'hbx_p1'};
+let DATA=ls(K.d)||JSON.parse(JSON.stringify(DEFAULT_DATA));
+let USERS=ls(K.u)||[];
+let DONE=ls(K.p)||[];
+let isAdmin=false,tab='modules',openMod=null,chip='All';
 
-function load(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
-function save(){ localStorage.setItem(LS_DATA, JSON.stringify(DATA)); }
-function saveUsers(){ localStorage.setItem(LS_USERS, JSON.stringify(USERS)); }
-function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function ls(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function save(){localStorage.setItem(K.d,JSON.stringify(DATA))}
+function saveU(){localStorage.setItem(K.u,JSON.stringify(USERS))}
+function saveP(){localStorage.setItem(K.p,JSON.stringify(DONE))}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+/* ================= cursor FX ================= */
+(function(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  if(matchMedia('(hover:none)').matches) return;
+  const a=document.getElementById('orb'),b=document.getElementById('orb2');
+  let tx=innerWidth/2,ty=innerHeight/2,ax=tx,ay=ty,bx=tx,by=ty;
+  addEventListener('pointermove',e=>{
+    tx=e.clientX;ty=e.clientY;document.body.classList.add('fx');
+    const c=e.target.closest && e.target.closest('.fx');
+    if(c){const r=c.getBoundingClientRect();
+      c.style.setProperty('--mx',(e.clientX-r.left)+'px');
+      c.style.setProperty('--my',(e.clientY-r.top)+'px');}
+  },{passive:true});
+  addEventListener('pointerleave',()=>document.body.classList.remove('fx'));
+  (function loop(){
+    ax+=(tx-ax)*.07; ay+=(ty-ay)*.07;
+    bx+=(tx-bx)*.26; by+=(ty-by)*.26;
+    a.style.transform='translate3d('+ax+'px,'+ay+'px,0)';
+    b.style.transform='translate3d('+bx+'px,'+by+'px,0)';
+    requestAnimationFrame(loop);
+  })();
+})();
 
 /* ================= embeds ================= */
-function toEmbed(url){
-  if(!url) return '';
-  const u=url.trim();
-  let m;
-  if((m=u.match(/youtu\.be\/([\w-]{6,})/)))               return 'https://www.youtube.com/embed/'+m[1];
-  if((m=u.match(/youtube\.com\/.*[?&]v=([\w-]{6,})/)))    return 'https://www.youtube.com/embed/'+m[1];
-  if((m=u.match(/youtube\.com\/(?:shorts|embed)\/([\w-]{6,})/))) return 'https://www.youtube.com/embed/'+m[1];
-  if((m=u.match(/loom\.com\/(?:share|embed)\/([\w-]+)/)))  return 'https://www.loom.com/embed/'+m[1];
-  if((m=u.match(/fathom\.video\/(?:share|calls|embed)\/([\w-]+)/))) return 'https://fathom.video/embed/'+m[1];
-  if((m=u.match(/vimeo\.com\/(\d+)/)))                    return 'https://player.vimeo.com/video/'+m[1];
-  if((m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/))) return 'https://drive.google.com/file/d/'+m[1]+'/preview';
+function toEmbed(u){
+  if(!u)return'';u=u.trim();let m;
+  if(m=u.match(/youtu\.be\/([\w-]{6,})/))                return'https://www.youtube.com/embed/'+m[1];
+  if(m=u.match(/youtube\.com\/.*[?&]v=([\w-]{6,})/))     return'https://www.youtube.com/embed/'+m[1];
+  if(m=u.match(/youtube\.com\/(?:shorts|embed)\/([\w-]{6,})/)) return'https://www.youtube.com/embed/'+m[1];
+  if(m=u.match(/loom\.com\/(?:share|embed)\/([\w-]+)/))   return'https://www.loom.com/embed/'+m[1];
+  if(m=u.match(/fathom\.video\/(?:share|calls|embed)\/([\w-]+)/)) return'https://fathom.video/embed/'+m[1];
+  if(m=u.match(/vimeo\.com\/(\d+)/))                      return'https://player.vimeo.com/video/'+m[1];
+  if(m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/))  return'https://drive.google.com/file/d/'+m[1]+'/preview';
   return u;
 }
 
 /* ================= gate ================= */
 function boot(){
-  document.getElementById('gBrand').textContent = CONFIG.BRAND;
-  document.getElementById('aBrand').textContent = CONFIG.BRAND;
-  document.getElementById('gMark').textContent  = CONFIG.MARK;
-  document.getElementById('aMark').textContent  = CONFIG.MARK;
-  document.getElementById('pMain').textContent  = CONFIG.PRICE_MAIN;
-  document.getElementById('pSub').textContent   = CONFIG.PRICE_SUB;
-  document.title = CONFIG.BRAND;
-
-  const box=document.getElementById('payFrameBox');
-  if(CONFIG.PAYMENT_EMBED_URL){
-    box.innerHTML='<iframe src="'+esc(CONFIG.PAYMENT_EMBED_URL)+'" allow="payment *" referrerpolicy="no-referrer-when-downgrade"></iframe>';
-  } else {
-    box.innerHTML='<div class="payPlaceholder"><strong>Payment embed goes here</strong>'+
-      'Open this file, find the CONFIG block near the top, and paste your WAP checkout embed URL into PAYMENT_EMBED_URL.'+
-      (CONFIG.PAYMENT_LINK_URL?'<div style="margin-top:16px"><a class="btn" href="'+esc(CONFIG.PAYMENT_LINK_URL)+'" target="_blank" rel="noopener">Open checkout</a></div>':'')+
-      '</div>';
-  }
-
-  const s=load(LS_SESS);
-  if(s && s.email){ const u=USERS.find(x=>x.email===s.email); if(u){ enter(u); return; } }
+  ['gBrand','aBrand','mBrand'].forEach(i=>document.getElementById(i).textContent=CONFIG.BRAND);
+  ['gMark','aMark','mMark'].forEach(i=>document.getElementById(i).textContent=CONFIG.MARK);
+  ['gKick','aKick'].forEach(i=>document.getElementById(i).textContent=CONFIG.KICKER);
+  document.getElementById('pMain').textContent=CONFIG.PRICE_MAIN;
+  document.getElementById('pSub').textContent=CONFIG.PRICE_SUB;
+  document.title=CONFIG.BRAND;
+  const s=ls(K.s); if(s&&s.email){const u=USERS.find(x=>x.email===s.email); if(u)return enter(u);}
 }
-
-function gateTab(w){
-  const l=w==='login';
-  document.getElementById('paneLogin').classList.toggle('hide',!l);
-  document.getElementById('paneSignup').classList.toggle('hide',l);
-  document.getElementById('tabLogin').classList.toggle('on',l);
-  document.getElementById('tabSignup').classList.toggle('on',!l);
+function gtab(l){
+  document.getElementById('paneL').classList.toggle('hide',!l);
+  document.getElementById('paneS').classList.toggle('hide',!!l);
+  document.getElementById('tabL').classList.toggle('on',!!l);
+  document.getElementById('tabS').classList.toggle('on',!l);
 }
-
 function doSignup(){
-  const box=document.getElementById('suErr');
-  const code=document.getElementById('suCode').value.trim();
-  const name=document.getElementById('suName').value.trim();
-  const email=document.getElementById('suEmail').value.trim().toLowerCase();
-  const pass=document.getElementById('suPass').value;
-  box.className='err';
-  if(code.toUpperCase()!==String(CONFIG.ACCESS_CODE).toUpperCase()){
-    box.textContent='That access code isn\'t right. It\'s on your confirmation page after payment.'; return; }
-  if(!name){ box.textContent='Add your name.'; return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ box.textContent='That email doesn\'t look right.'; return; }
-  if(pass.length<8){ box.textContent='Password needs to be at least 8 characters.'; return; }
-  if(USERS.some(u=>u.email===email)){ box.textContent='There\'s already an account on that email. Try logging in.'; return; }
-  const u={name,email,pass,joined:new Date().toISOString()};
-  USERS.push(u); saveUsers();
-  localStorage.setItem(LS_SESS, JSON.stringify({email}));
-  enter(u);
+  const e=document.getElementById('eS');e.className='err';
+  const c=document.getElementById('suC').value.trim(),n=document.getElementById('suN').value.trim(),
+        m=document.getElementById('suE').value.trim().toLowerCase(),p=document.getElementById('suP').value;
+  if(c.toUpperCase()!==String(CONFIG.ACCESS_CODE).toUpperCase())return e.textContent="That access code isn't right. It's on your confirmation page after payment.";
+  if(!n)return e.textContent='Add your name.';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m))return e.textContent="That email doesn't look right.";
+  if(p.length<8)return e.textContent='Password needs at least 8 characters.';
+  if(USERS.some(u=>u.email===m))return e.textContent="There's already an account on that email. Try logging in.";
+  const u={name:n,email:m,pass:p,joined:new Date().toISOString()};
+  USERS.push(u);saveU();localStorage.setItem(K.s,JSON.stringify({email:m}));enter(u);
 }
-
 function doLogin(){
-  const box=document.getElementById('loginErr');
-  const email=document.getElementById('liEmail').value.trim().toLowerCase();
-  const pass=document.getElementById('liPass').value;
-  const u=USERS.find(x=>x.email===email && x.pass===pass);
-  box.className='err';
-  if(!u){ box.textContent='Those details don\'t match an account here.'; return; }
-  localStorage.setItem(LS_SESS, JSON.stringify({email}));
-  enter(u);
+  const e=document.getElementById('eL');e.className='err';
+  const m=document.getElementById('liE').value.trim().toLowerCase(),p=document.getElementById('liP').value;
+  const u=USERS.find(x=>x.email===m&&x.pass===p);
+  if(!u)return e.textContent="Those details don't match an account here.";
+  localStorage.setItem(K.s,JSON.stringify({email:m}));enter(u);
 }
-
 function askAdmin(){
-  modal({
-    title:'Admin mode',
-    help:'Skips payment and login so you can edit the portal.',
-    fields:[{k:'pw',l:'Password',type:'password'}],
-    cta:'Enter',
-    onOk:v=>{
-      if(v.pw!==CONFIG.ADMIN_PASS) return 'Wrong password.';
-      isAdmin=true; document.body.classList.add('adminOn');
-      document.getElementById('adminBar').classList.remove('hide');
-      enter({name:'Admin', email:'admin', pass:''});
-    }
-  });
+  modal({title:'Admin mode',help:'Skips checkout and login so you can edit the portal.',
+    fields:[{k:'pw',l:'Password',type:'password'}],cta:'Enter',
+    onOk:v=>{ if(v.pw!==CONFIG.ADMIN_PASS)return'Wrong password.';
+      isAdmin=true;document.body.classList.add('admin');
+      enter({name:'Admin',email:'admin mode',pass:''}); }});
 }
-function exitAdmin(){ isAdmin=false; document.body.classList.remove('adminOn');
-  document.getElementById('adminBar').classList.add('hide'); logout(); }
-
 function enter(u){
   document.getElementById('gate').classList.add('hide');
   document.getElementById('app').classList.remove('hide');
-  document.getElementById('whoAmI').innerHTML = esc(u.name)+'<br>'+esc(u.email);
+  document.getElementById('whoN').textContent=u.name;
+  document.getElementById('whoE').textContent=u.email;
+  document.getElementById('avI').textContent=(u.name||'?').trim().charAt(0).toUpperCase();
   render();
 }
 function logout(){
-  localStorage.removeItem(LS_SESS);
+  localStorage.removeItem(K.s);isAdmin=false;document.body.classList.remove('admin');
   document.getElementById('app').classList.add('hide');
-  document.getElementById('gate').classList.remove('hide');
-  window.scrollTo(0,0);
+  document.getElementById('gate').classList.remove('hide');scrollTo(0,0);
 }
 
 /* ================= nav ================= */
 function go(t){
-  tab=t;
-  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on', b.dataset.t===t));
-  render(); window.scrollTo(0,0);
+  tab=t;openMod=null;
+  document.querySelectorAll('.navi,.mtabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  render();scrollTo(0,0);
 }
-
-/* ================= render ================= */
 function render(){
   const v=document.getElementById('view');
-  if(tab==='modules')    v.innerHTML=viewModules();
-  if(tab==='recordings') v.innerHTML=viewRecordings();
-  if(tab==='assets')     v.innerHTML=viewAssets();
-  if(tab==='community')  v.innerHTML=viewCommunity();
+  const bar='<div id="abar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:16px;height:16px"><path d="M12 3l8 4v6c0 4-3.5 7-8 8-4.5-1-8-4-8-8V7l8-4z"/></svg>'+
+    '<span class="sp">Admin mode. Edits save to this browser only. Hit Export when done, then paste over the DEFAULT_DATA block.</span>'+
+    '<button onclick="exportData()">Export site data</button><button onclick="logout()">Exit</button></div>';
+  v.innerHTML=bar+({modules:vModules,recordings:vRec,assets:vAssets,community:vComm}[tab])();
+  updProg();
+  v.querySelectorAll('.mod,.asset,.cbox,.row').forEach((el,i)=>{
+    el.classList.add('up','fx'); el.style.animationDelay=Math.min(i*.035,.3)+'s';
+  });
+}
+function head(k,t,s){return '<div class="phead"><span class="kicker">'+esc(k)+'</span><h2>'+esc(t)+'</h2><p>'+esc(s)+'</p></div>'}
+function updProg(){
+  const n=DONE.length,t=DATA.modules.length;
+  const a=document.getElementById('progTxt'),b=document.getElementById('progBar');
+  if(a)a.textContent=n+' / '+t;
+  if(b)b.style.width=(t?Math.round(n/t*100):0)+'%';
 }
 
-function head(t,s){ return '<div class="pageHead"><h2>'+esc(t)+'</h2><p class="muted">'+esc(s)+'</p></div>'; }
-
-function viewModules(){
-  let h=head('Modules','Work through them in order. The order is the whole point.');
-  let lastPart=null;
+/* ================= modules ================= */
+function vModules(){
+  let h=head('The LAUNCH Path','Modules','Work them in order. The order is the whole point.'),last=null;
   DATA.modules.forEach((m,i)=>{
-    if(m.part!==lastPart){ lastPart=m.part;
-      h+='<div class="partHead"><h3>'+esc(m.part)+'</h3><div></div></div>'; }
-    const open = openMod===i;
-    h+='<div class="mod">'+
-       '<div class="modTop" onclick="toggleMod('+i+')">'+
-         '<div class="modNum">'+m.n+'</div>'+
-         '<div class="modTitle"><b>'+esc(m.title)+'</b><span>'+esc(m.sub)+'</span></div>'+
-         '<div class="chev">'+(open?'▲':'▼')+'</div>'+
-       '</div>';
-    if(open){
-      h+='<div class="modBody">';
+    if(m.part!==last){last=m.part;
+      const num=['One','Two','Three'][[...new Set(DATA.modules.map(x=>x.part))].indexOf(m.part)]||'';
+      h+='<div class="partband"><span class="pn">Part '+num+'</span><span class="pl">'+esc(m.part)+'</span><span class="ln"></span></div>';}
+    const o=openMod===i,done=DONE.includes(m.n);
+    h+='<div class="mod'+(o?' open':'')+'">'+
+      '<div class="mhead" onclick="tog('+i+')">'+
+        '<span class="mno">MODULE '+String(m.n).padStart(2,'0')+'</span>'+
+        '<div class="mtitle"><b>'+esc(m.title)+'</b><span>'+esc(m.sub)+'</span></div>'+
+        '<span class="pill'+(done?' on':'')+'">'+(done?'Done':(m.video?'Ready':'No video'))+'</span>'+
+        '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>'+
+      '</div>';
+    if(o){
+      h+='<div class="mbody">';
       h+= m.video
-        ? '<div class="vidWrap"><iframe src="'+esc(toEmbed(m.video))+'" allowfullscreen allow="fullscreen; picture-in-picture"></iframe></div>'
-        : '<div class="vidEmpty">No video on this module yet'+(isAdmin?'<br><span class="tiny">Use Set video below</span>':'')+'</div>';
-      if(isAdmin) h+='<button class="btn ghost sm adminOnly" onclick="editVideo('+i+')">Set video</button>';
-      if(m.points && m.points.length){
-        h+='<div class="sub"><div class="lbl">What\'s covered</div><ul>'+
-            m.points.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul></div>';
-      }
-      if(m.prompt){
-        h+='<div class="sub"><div class="lbl">Copy-paste AI prompt</div>'+
-           '<div class="promptBox"><pre id="pr'+i+'">'+esc(m.prompt)+'</pre>'+
-           '<div class="cardRow"><button class="btn sm" onclick="copyPrompt('+i+')">Copy prompt</button></div></div></div>';
-      }
-      if(m.call){
-        h+='<div class="callBox"><div class="lbl">What to cover on the call</div>'+
-           '<p class="muted" style="margin-top:6px">'+esc(m.call)+'</p></div>';
-      }
+        ? '<div class="vwrap"><iframe src="'+esc(toEmbed(m.video))+'" allowfullscreen allow="fullscreen; picture-in-picture"></iframe></div>'
+        : '<div class="vempty"><b>No video on this module yet</b><span class="tiny">'+(isAdmin?'Use Set video below':'It will appear here after the call')+'</span></div>';
+      if(isAdmin)h+='<button class="btn ghost sm adm" style="margin-top:10px" onclick="edVid('+i+')">Set video</button>';
+      if(m.points&&m.points.length)h+='<h4>What\'s covered</h4><ul class="plist">'+m.points.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>';
+      if(m.prompt)h+='<h4>Copy-paste AI prompt</h4><div class="prompt"><button class="copy" onclick="cpP('+i+')">Copy</button><pre>'+esc(m.prompt)+'</pre></div>';
+      if(m.call)h+='<div class="callbox"><h4 style="margin-top:0">What to cover on the call</h4><p class="muted">'+esc(m.call)+'</p></div>';
+      h+='<div class="doneRow"><button class="btn '+(done?'ghost':'')+' sm" onclick="mark('+m.n+')">'+
+         (done?'Mark not done':'Mark complete')+'</button><span class="tiny">'+DONE.length+' of '+DATA.modules.length+' complete</span></div>';
       h+='</div>';
     }
     h+='</div>';
   });
-  h+='<div class="discl"><b>A note on the AI prompts.</b> They are built to help you research and draft faster. '+
-     'Anything to do with your state\'s licensing, Medicaid rules, reimbursement rates or compliance deadlines must be '+
-     'confirmed directly with your state agency or a licensed professional. Never file or submit anything based on an AI answer alone.</div>';
+  h+='<div class="discl"><b>About the AI prompts.</b> They help you research and draft faster. Anything to do with your state\'s licensing, Medicaid rules, reimbursement rates or compliance deadlines must be confirmed directly with your state agency or a licensed professional. Never file or submit anything based on an AI answer alone.</div>';
   return h;
 }
-function toggleMod(i){ openMod = (openMod===i? null : i); render(); }
-function copyPrompt(i){
-  navigator.clipboard.writeText(DATA.modules[i].prompt).then(()=>toast('Prompt copied'));
-}
-function editVideo(i){
-  modal({ title:'Module video', help:'Paste a Loom, Fathom, YouTube, Vimeo or Drive link. It converts to an embed automatically.',
-    fields:[{k:'u',l:'Video link',val:DATA.modules[i].video}], cta:'Save',
-    onOk:v=>{ DATA.modules[i].video=v.u.trim(); save(); render(); } });
-}
+function tog(i){openMod=openMod===i?null:i;render()}
+function mark(n){const i=DONE.indexOf(n);i<0?DONE.push(n):DONE.splice(i,1);saveP();render();toast(i<0?'Nice. Module complete.':'Unmarked')}
+function cpP(i){navigator.clipboard.writeText(DATA.modules[i].prompt).then(()=>toast('Prompt copied'))}
+function edVid(i){modal({title:'Module video',help:'Paste a Loom, Fathom, YouTube, Vimeo or Drive link. It converts to an embed automatically.',
+  fields:[{k:'u',l:'Video link',val:DATA.modules[i].video}],cta:'Save',
+  onOk:v=>{DATA.modules[i].video=v.u.trim();save();render()}})}
 
-function viewRecordings(){
-  let h=head('Recordings','Every call recording in one place.');
-  if(isAdmin) h+='<button class="btn sm adminOnly" style="margin-bottom:14px" onclick="addRec()">+ Add recording</button>';
-  if(!DATA.recordings.length) return h+'<div class="empty">No recordings yet.'+(isAdmin?' Use Add recording above.':' They\'ll show up here after each call.')+'</div>';
+/* ================= recordings ================= */
+function vRec(){
+  let h=head('Call library','Recordings','Every coaching call in one place.');
+  if(isAdmin)h+='<button class="btn sm adm" style="margin-bottom:16px" onclick="addRec()">+ Add recording</button>';
+  if(!DATA.recordings.length)return h+'<div class="empty">Nothing here yet.'+(isAdmin?' Use Add recording above.':' Recordings appear after each call.')+'</div>';
   DATA.recordings.forEach((r,i)=>{
-    h+='<div class="rowItem"><div class="ri"><b>'+esc(r.title)+'</b><span>'+esc(r.date||'')+'</span></div>'+
-       '<a class="btn ghost sm" href="'+esc(r.url)+'" target="_blank" rel="noopener">Watch</a>'+
-       (isAdmin?'<button class="btn ghost sm adminOnly" onclick="delItem(\'recordings\','+i+')">Remove</button>':'')+
-       '</div>';
+    h+='<div class="row"><div class="rt"><b>'+esc(r.title)+'</b><span>'+esc(r.date||'')+'</span></div>'+
+      (r.url?'<a class="btn ghost sm" href="'+esc(r.url)+'" target="_blank" rel="noopener">Watch</a>':'')+
+      (isAdmin?'<button class="btn ghost sm adm" onclick="del(\'recordings\','+i+')">Remove</button>':'')+'</div>';
   });
   return h;
 }
-function addRec(){
-  modal({ title:'Add recording', fields:[
-    {k:'title',l:'Title'},{k:'date',l:'Date'},{k:'url',l:'Link (Loom, Fathom, YouTube, Drive)'}],
-    cta:'Add', onOk:v=>{ if(!v.title) return 'Give it a title.';
-      DATA.recordings.push({title:v.title,date:v.date,url:v.url}); save(); render(); } });
-}
+function addRec(){modal({title:'Add recording',fields:[{k:'title',l:'Title'},{k:'date',l:'Date'},{k:'url',l:'Link'}],
+  cta:'Add',onOk:v=>{if(!v.title)return'Give it a title.';DATA.recordings.push(v);save();render()}})}
 
-function viewAssets(){
-  let h=head('Assets','Everything below is included. Nothing extra to buy.');
-  const cats=[...new Set(DATA.assets.map(a=>a.cat||'Other'))];
-  cats.forEach(c=>{
-    h+='<div class="catHead">'+esc(c)+'</div><div class="grid">';
-    DATA.assets.forEach((a,i)=>{
-      if((a.cat||'Other')!==c) return;
-      h+='<div class="card"><div class="ico">'+esc(a.ico||'📄')+'</div>'+
-         '<b>'+esc(a.name)+'</b><p>'+esc(a.desc||'')+'</p><div class="cardRow">'+
-         (a.url?'<a class="btn sm" href="'+esc(a.url)+'" target="_blank" rel="noopener">Open</a>':'<span class="pill">Coming soon</span>')+
-         (a.url?'<button class="btn ghost sm" onclick="copyLink(\''+esc(a.url)+'\')">Copy link</button>':'')+
-         (isAdmin?'<button class="btn ghost sm adminOnly" onclick="editAsset('+i+')">Edit</button>':'')+
-         '</div></div>';
-    });
-    h+='</div>';
-  });
-  if(isAdmin) h+='<div class="grid" style="margin-top:12px"><button class="addCard adminOnly blk" onclick="editAsset(-1)">+ Add asset</button></div>';
-  return h;
-}
-function editAsset(i){
-  const a = i<0 ? {name:'',cat:'',ico:'📄',url:'',desc:''} : DATA.assets[i];
-  modal({ title: i<0?'Add asset':'Edit asset',
-    fields:[{k:'name',l:'Name',val:a.name},{k:'cat',l:'Category',val:a.cat},
-            {k:'ico',l:'Emoji',val:a.ico},{k:'url',l:'Link (Notion, Drive, PDF)',val:a.url},
-            {k:'desc',l:'One-line description',val:a.desc,ta:true}],
-    cta:'Save', extra: i<0?null:{label:'Delete',fn:()=>{ DATA.assets.splice(i,1); save(); render(); }},
-    onOk:v=>{ if(!v.name) return 'Give it a name.';
-      const o={name:v.name,cat:v.cat||'Other',ico:v.ico||'📄',url:v.url,desc:v.desc};
-      if(i<0) DATA.assets.push(o); else DATA.assets[i]=o;
-      save(); render(); } });
-}
-function copyLink(u){ navigator.clipboard.writeText(u).then(()=>toast('Link copied')); }
-
-function viewCommunity(){
-  const c=DATA.community;
-  let h=head('Community','Get unstuck fast.');
+/* ================= assets ================= */
+function vAssets(){
+  let h=head('Everything included','Assets','All unlocked. Nothing extra to buy.');
+  const cats=['All',...new Set(DATA.assets.map(a=>a.cat||'Other'))];
+  h+='<div class="chips">'+cats.map(c=>'<button class="chip'+(chip===c?' on':'')+'" onclick="setChip(\''+esc(c)+'\')">'+esc(c)+'</button>').join('')+'</div>';
   h+='<div class="grid">';
-  h+= card('📞','Call support', c.note||'', c.phone?{t:'Call now',u:'tel:'+c.phone}:null);
-  h+= card('💬','Slack community','Ask questions, post wins, see what others are building.', c.slack?{t:'Open Slack',u:c.slack}:null);
-  h+= card('🗓️','Book a 1:1','Your roadmap call, or a session when you\'re stuck.', c.booking?{t:'Book a time',u:c.booking}:null);
-  h+='</div>';
-  if(isAdmin) h+='<button class="btn ghost sm adminOnly" style="margin-top:14px" onclick="editCommunity()">Edit contact details</button>';
-
-  h+='<div class="catHead" style="margin-top:32px">Upcoming group calls</div>';
-  if(isAdmin) h+='<button class="btn sm adminOnly" style="margin-bottom:14px" onclick="addCall()">+ Add call</button>';
-  if(!DATA.calls.length){ h+='<div class="empty">Nothing scheduled yet.</div>'; }
-  else DATA.calls.forEach((k,i)=>{
-    h+='<div class="rowItem"><div class="ri"><b>'+esc(k.title)+'</b><span>'+esc(k.date)+' · '+esc(k.time)+'</span></div>'+
-       (k.url?'<a class="btn ghost sm" href="'+esc(k.url)+'" target="_blank" rel="noopener">Join</a>':'')+
-       (isAdmin?'<button class="btn ghost sm adminOnly" onclick="delItem(\'calls\','+i+')">Remove</button>':'')+
-       '</div>';
+  DATA.assets.forEach((a,i)=>{
+    if(chip!=='All'&&(a.cat||'Other')!==chip)return;
+    h+='<div class="asset"><div class="ic">'+esc(a.ico||'📄')+'</div>'+
+      '<span class="kicker">'+esc(a.cat||'Other')+'</span>'+
+      '<b>'+esc(a.name)+'</b><p>'+esc(a.desc||'')+'</p><div class="arow">'+
+      (a.url?'<a class="btn sm" style="flex:1;text-align:center" href="'+esc(a.url)+'" target="_blank" rel="noopener">Open</a>'
+            :'<span class="pill">Coming soon</span>')+
+      (a.url?'<button class="btn ghost sm" onclick="cp(\''+esc(a.url)+'\')">Link</button>':'')+
+      (isAdmin?'<button class="btn ghost sm adm" onclick="edAsset('+i+')">Edit</button>':'')+
+      '</div></div>';
   });
+  if(isAdmin)h+='<button class="addcard adm blk" onclick="edAsset(-1)"><span class="plus">+</span>Add asset</button>';
+  return h+'</div>';
+}
+function setChip(c){chip=c;render()}
+function cp(u){navigator.clipboard.writeText(u).then(()=>toast('Link copied'))}
+function edAsset(i){
+  const a=i<0?{name:'',cat:'',ico:'📄',url:'',desc:''}:DATA.assets[i];
+  modal({title:i<0?'Add asset':'Edit asset',
+    fields:[{k:'name',l:'Name',val:a.name},{k:'cat',l:'Category',val:a.cat},{k:'ico',l:'Emoji',val:a.ico},
+            {k:'url',l:'Link (Notion, Drive, PDF)',val:a.url},{k:'desc',l:'One-line description',val:a.desc,ta:1}],
+    cta:'Save',extra:i<0?null:{label:'Delete',fn:()=>{DATA.assets.splice(i,1);save();render()}},
+    onOk:v=>{if(!v.name)return'Give it a name.';
+      const o={name:v.name,cat:v.cat||'Other',ico:v.ico||'📄',url:v.url,desc:v.desc};
+      i<0?DATA.assets.push(o):DATA.assets[i]=o;save();render();}});
+}
+
+/* ================= community ================= */
+function vComm(){
+  const c=DATA.community;
+  let h=head('Get unstuck','Community','Support, the group, and your calls.');
+  h+='<div class="cgrid">';
+  h+=cbox('Direct support',c.note||'',c.phone?{t:'Call now',u:'tel:'+c.phone}:null);
+  h+=cbox('The community','Ask questions, post wins, see what others are building.',c.slack?{t:'Open Slack',u:c.slack}:null);
+  h+=cbox('Book a 1:1','Your roadmap call, or a session when you are stuck.',c.booking?{t:'Book a time',u:c.booking}:null);
+  h+=cbox('Upcoming group calls',DATA.calls.length?'':'Nothing scheduled yet.',null,
+    DATA.calls.map((k,i)=>{
+      const d=String(k.date||'');
+      return '<div class="row" style="margin:10px 0 0"><div class="dbox"><div class="m">'+esc(d.slice(0,3))+'</div><div class="d">'+esc(d.replace(/\D/g,'').slice(0,2)||'—')+'</div></div>'+
+      '<div class="rt"><b>'+esc(k.title)+'</b><span>'+esc(d)+' · '+esc(k.time||'')+'</span></div>'+
+      (k.url?'<a class="btn ghost sm" href="'+esc(k.url)+'" target="_blank" rel="noopener">Join</a>':'')+
+      (isAdmin?'<button class="btn ghost sm adm" onclick="del(\'calls\','+i+')">×</button>':'')+'</div>';
+    }).join('') + (isAdmin?'<button class="btn sm adm" style="margin-top:14px" onclick="addCall()">+ Add call</button>':''));
+  h+='</div>';
+  if(isAdmin)h+='<button class="btn ghost sm adm" style="margin-top:16px" onclick="edComm()">Edit contact details</button>';
   return h;
 }
-function card(ico,title,desc,btn){
-  return '<div class="card"><div class="ico">'+ico+'</div><b>'+esc(title)+'</b><p>'+esc(desc)+'</p>'+
-    '<div class="cardRow">'+(btn?'<a class="btn sm" href="'+esc(btn.u)+'" target="_blank" rel="noopener">'+esc(btn.t)+'</a>':'<span class="pill">Not set up yet</span>')+'</div></div>';
+function cbox(t,s,btn,extra){
+  return '<div class="cbox"><h3>'+esc(t)+'</h3><p class="cs">'+esc(s)+'</p>'+
+    (btn?'<a class="btn wide" href="'+esc(btn.u)+'" target="_blank" rel="noopener">'+esc(btn.t)+'</a>':'')+
+    (!btn&&!extra?'<span class="pill">Not set up yet</span>':'')+(extra||'')+'</div>';
 }
-function editCommunity(){
-  const c=DATA.community;
-  modal({ title:'Contact details', fields:[
-    {k:'phone',l:'Phone number',val:c.phone},{k:'slack',l:'Slack invite link',val:c.slack},
-    {k:'booking',l:'Booking link',val:c.booking},{k:'note',l:'Support hours note',val:c.note,ta:true}],
-    cta:'Save', onOk:v=>{ DATA.community={phone:v.phone,slack:v.slack,booking:v.booking,note:v.note}; save(); render(); } });
-}
-function addCall(){
-  modal({ title:'Add group call', fields:[
-    {k:'title',l:'Title'},{k:'date',l:'Date'},{k:'time',l:'Time (with timezone)'},{k:'url',l:'Zoom link'}],
-    cta:'Add', onOk:v=>{ if(!v.title) return 'Give it a title.';
-      DATA.calls.push({title:v.title,date:v.date,time:v.time,url:v.url}); save(); render(); } });
-}
-function delItem(k,i){ DATA[k].splice(i,1); save(); render(); }
+function edComm(){const c=DATA.community;
+  modal({title:'Contact details',fields:[{k:'phone',l:'Phone number',val:c.phone},{k:'slack',l:'Slack invite link',val:c.slack},
+    {k:'booking',l:'Booking link',val:c.booking},{k:'note',l:'Support hours note',val:c.note,ta:1}],
+    cta:'Save',onOk:v=>{DATA.community=v;save();render()}})}
+function addCall(){modal({title:'Add group call',fields:[{k:'title',l:'Title'},{k:'date',l:'Date (e.g. Mar 14)'},
+  {k:'time',l:'Time with timezone'},{k:'url',l:'Zoom link'}],cta:'Add',
+  onOk:v=>{if(!v.title)return'Give it a title.';DATA.calls.push(v);save();render()}})}
+function del(k,i){DATA[k].splice(i,1);save();render()}
 
-/* ================= modal ================= */
+/* ================= modal / toast / export ================= */
 function modal(o){
   const host=document.getElementById('modalHost');
-  host.innerHTML='<div class="modalBg" id="mbg"><div class="modal">'+
-    '<h3>'+esc(o.title)+'</h3>'+(o.help?'<p class="mh">'+esc(o.help)+'</p>':'<div style="height:12px"></div>')+
-    '<div id="mErr"></div>'+
+  host.innerHTML='<div class="mbg" id="mbg"><div class="msheet"><h3>'+esc(o.title)+'</h3>'+
+    (o.help?'<p class="ms">'+esc(o.help)+'</p>':'')+'<div id="mErr"></div>'+
     o.fields.map((f,i)=>'<label class="lbl">'+esc(f.l)+'</label>'+
-      (f.ta?'<textarea class="field" rows="3" id="mf'+i+'">'+esc(f.val||'')+'</textarea>'
+      (f.ta?'<textarea class="field" id="mf'+i+'">'+esc(f.val||'')+'</textarea>'
            :'<input class="field" id="mf'+i+'" type="'+(f.type||'text')+'" value="'+esc(f.val||'')+'">')).join('')+
-    '<div class="modalRow"><button class="btn" id="mOk">'+esc(o.cta||'Save')+'</button>'+
-    '<button class="btn ghost" id="mCancel">Cancel</button>'+
-    (o.extra?'<button class="btn ghost" id="mExtra" style="margin-left:auto">'+esc(o.extra.label)+'</button>':'')+
-    '</div></div></div>';
+    '<div class="mrow"><button class="btn" style="flex:1" id="mOk">'+esc(o.cta||'Save')+'</button>'+
+    '<button class="btn ghost" id="mX">Cancel</button>'+
+    (o.extra?'<button class="btn ghost" id="mE">'+esc(o.extra.label)+'</button>':'')+'</div></div></div>';
   const close=()=>host.innerHTML='';
-  document.getElementById('mCancel').onclick=close;
-  document.getElementById('mbg').onclick=e=>{ if(e.target.id==='mbg') close(); };
-  if(o.extra) document.getElementById('mExtra').onclick=()=>{ o.extra.fn(); close(); };
+  document.getElementById('mX').onclick=close;
+  document.getElementById('mbg').onclick=e=>{if(e.target.id==='mbg')close()};
+  if(o.extra)document.getElementById('mE').onclick=()=>{o.extra.fn();close()};
   document.getElementById('mOk').onclick=()=>{
-    const v={}; o.fields.forEach((f,i)=>v[f.k]=document.getElementById('mf'+i).value);
+    const v={};o.fields.forEach((f,i)=>v[f.k]=document.getElementById('mf'+i).value);
     const err=o.onOk(v);
-    if(err){ const e=document.getElementById('mErr'); e.className='err'; e.textContent=err; return; }
+    if(err){const e=document.getElementById('mErr');e.className='err';e.textContent=err;return}
     close();
   };
-  const first=document.getElementById('mf0'); if(first) first.focus();
+  const f=document.getElementById('mf0');if(f)f.focus();
+  addEventListener('keydown',function esc2(e){if(e.key==='Escape'){close();removeEventListener('keydown',esc2)}});
 }
-
-function toast(msg){
-  const d=document.createElement('div');
-  d.textContent=msg;
-  d.style.cssText='position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--card2);'+
-    'border:1px solid var(--line2);color:var(--txt);padding:10px 16px;border-radius:10px;font-size:13.5px;z-index:99';
-  document.body.appendChild(d);
-  setTimeout(()=>d.remove(),1800);
-}
-
-/* ================= export ================= */
+let tt;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
+  clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2000)}
 function exportData(){
   const out='const DEFAULT_DATA = '+JSON.stringify(DATA,null,2)+';';
   navigator.clipboard.writeText(out).then(()=>{
-    modal({ title:'Copied to your clipboard', help:'Now open this HTML file, find the DEFAULT_DATA block near the top, '+
-      'and replace the whole block with what you just copied. Save, re-upload, and every member sees your changes.',
-      fields:[], cta:'Got it', onOk:()=>{} });
+    modal({title:'Copied to your clipboard',
+      help:'Open this HTML file, find the DEFAULT_DATA block near the top, and replace the whole block with what you just copied. Save, re-upload, and every member sees the change.',
+      fields:[],cta:'Got it',onOk:()=>{}});
   }).catch(()=>{
-    modal({ title:'Copy this manually', help:'Select it all, copy, and paste over the DEFAULT_DATA block in the file.',
-      fields:[{k:'x',l:'Site data',val:out,ta:true}], cta:'Done', onOk:()=>{} });
+    modal({title:'Copy this manually',help:'Select all, copy, then paste over the DEFAULT_DATA block.',
+      fields:[{k:'x',l:'Site data',val:out,ta:1}],cta:'Done',onOk:()=>{}});
   });
 }
 
