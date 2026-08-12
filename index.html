@@ -595,24 +595,7 @@ body.admin .adm.blk{display:flex}
 
 <div id="modalHost"></div>
 
-<!-- Whop checkout mount: built from the WHOP template above -->
-<script>
-(function(){
-  var m=document.getElementById('whopMount');
-  if(WHOP.PLAN_ID){
-    var d=document.createElement('div');
-    d.setAttribute('data-whop-checkout-plan-id', WHOP.PLAN_ID);
-    d.setAttribute('data-whop-checkout-theme-background-color', WHOP.BG);
-    d.setAttribute('data-whop-checkout-theme-accent-color', WHOP.ACCENT);
-    d.setAttribute('data-whop-checkout-theme-border-radius', WHOP.RADIUS);
-    m.appendChild(d);
-  } else {
-    m.innerHTML='<div class="payPh"><strong>Checkout goes here</strong>'+
-      'Open this file, find the WHOP block at the top, and paste your plan ID into PLAN_ID.</div>';
-  }
-})();
-</script>
-<script async src="https://js.whop.com/static/checkout/loader.js"></script>
+
 
 <script>
 /* ================= state ================= */
