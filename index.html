@@ -14,9 +14,30 @@ const CONFIG = {
   KICKER:     "MEMBER PORTAL",
   MARK:       "HB",
   ADMIN_PASS: "health-care in a box admin",
-  ACCESS_CODE:"LAUNCH2026",           // handed out on the Whop confirmation page
   PRICE_MAIN: "$597",
   PRICE_SUB:  "then $47/mo"
+};
+
+/* ==================================================================
+   SUPABASE  —  makes accounts work on every browser and device
+
+   Leave both blank and the portal still runs, but accounts live only
+   in the browser that created them. That is the "my login disappeared"
+   problem. Fill these two in and it goes away.
+
+   Setup, about 3 minutes, no SQL needed:
+     1. supabase.com  >  New project
+     2. Project Settings > API  >  copy "Project URL" and the "anon public" key
+     3. Paste them below
+     4. Authentication > Sign In / Providers > Email  >  turn OFF
+        "Confirm email" (otherwise nobody can log in until they click
+        a verification email)
+
+   Accounts and each member's module progress then sync everywhere.
+   ================================================================== */
+const SUPABASE = {
+  URL: "",
+  ANON_KEY: ""
 };
 
 /* ==================================================================
@@ -31,6 +52,12 @@ const CONFIG = {
    ================================================================== */
 const WHOP = {
   PLAN_ID:   "plan_qQp6dh6JFhBCJ",
+
+  // Where Whop sends them after paying. Must be THIS page's live URL.
+  // Whop appends ?status=success or ?status=error, and the page reacts to it.
+  // Leave "" and it uses whatever URL the page is currently on.
+  RETURN_URL: "",
+
   BG:        "#0b0b12",
   ACCENT:    "#7c5cff",
   RADIUS:    "14"
@@ -242,6 +269,11 @@ textarea.field{min-height:76px;resize:vertical}
   background:var(--card2);border:1px solid var(--line2);color:var(--dim)}
 .pill.on{color:var(--good);border-color:rgba(61,214,140,.35);background:rgba(61,214,140,.1)}
 .err{color:#FF8080;font-size:13px;margin-bottom:10px}
+.okbox{margin-top:16px;padding:13px 15px;border-radius:12px;font-size:13.5px;line-height:1.55;
+  background:rgba(61,214,140,.1);border:1px solid rgba(61,214,140,.34);color:#8FE9BE}
+.okbox b{color:#B6F2D6}
+.warnbox{margin-top:16px;padding:13px 15px;border-radius:12px;font-size:13.5px;line-height:1.55;
+  background:rgba(224,168,58,.1);border:1px solid rgba(224,168,58,.32);color:#EBCB90}
 
 /* ================= GATE ================= */
 #gate{min-height:100vh;display:flex;flex-direction:column;padding:0 22px 40px;
@@ -505,6 +537,7 @@ body.admin .adm.blk{display:flex}
         <h2>Get access</h2>
         <p class="ph">Complete enrolment below. Your access code is on the confirmation page.</p>
         <div id="whopMount"></div>
+        <div id="payNote"></div>
 
         <div class="sep"><div></div>Already paid?<div></div></div>
 
@@ -525,8 +558,6 @@ body.admin .adm.blk{display:flex}
 
         <div id="paneS" class="hide">
           <div id="eS"></div>
-          <label class="lbl">Access code</label>
-          <input class="field" id="suC" placeholder="From your confirmation page">
           <label class="lbl">Full name</label>
           <input class="field" id="suN" placeholder="Jane Smith">
           <label class="lbl">Email</label>
@@ -595,7 +626,26 @@ body.admin .adm.blk{display:flex}
 
 <div id="modalHost"></div>
 
-
+<!-- Whop checkout mount: built from the WHOP template above -->
+<script>
+(function(){
+  var m=document.getElementById('whopMount');
+  if(WHOP.PLAN_ID){
+    var d=document.createElement('div');
+    d.setAttribute('data-whop-checkout-plan-id', WHOP.PLAN_ID);
+    d.setAttribute('data-whop-checkout-return-url',
+      WHOP.RETURN_URL || (location.origin + location.pathname));
+    d.setAttribute('data-whop-checkout-theme-background-color', WHOP.BG);
+    d.setAttribute('data-whop-checkout-theme-accent-color', WHOP.ACCENT);
+    d.setAttribute('data-whop-checkout-theme-border-radius', WHOP.RADIUS);
+    m.appendChild(d);
+  } else {
+    m.innerHTML='<div class="payPh"><strong>Checkout goes here</strong>'+
+      'Open this file, find the WHOP block at the top, and paste your plan ID into PLAN_ID.</div>';
+  }
+})();
+</script>
+<script async src="https://js.whop.com/static/checkout/loader.js"></script>
 
 <script>
 /* ================= state ================= */
@@ -647,15 +697,57 @@ function toEmbed(u){
   return u;
 }
 
+/* ================= supabase (optional) ================= */
+let SB=null;
+const cloud=()=>!!SB;
+
+async function initSB(){
+  if(!SUPABASE.URL||!SUPABASE.ANON_KEY) return;
+  await new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    s.onload=res; s.onerror=rej; document.head.appendChild(s);
+  }).catch(()=>{});
+  if(window.supabase&&window.supabase.createClient){
+    SB=window.supabase.createClient(SUPABASE.URL,SUPABASE.ANON_KEY);
+  }
+}
+function sbUser(u){
+  const md=u.user_metadata||{};
+  return {name:md.name||u.email.split('@')[0],email:u.email,done:Array.isArray(md.done)?md.done:[]};
+}
+
 /* ================= gate ================= */
-function boot(){
+async function boot(){
   ['gBrand','aBrand','mBrand'].forEach(i=>document.getElementById(i).textContent=CONFIG.BRAND);
   ['gMark','aMark','mMark'].forEach(i=>document.getElementById(i).textContent=CONFIG.MARK);
   ['gKick','aKick'].forEach(i=>document.getElementById(i).textContent=CONFIG.KICKER);
   document.getElementById('pMain').textContent=CONFIG.PRICE_MAIN;
   document.getElementById('pSub').textContent=CONFIG.PRICE_SUB;
   document.title=CONFIG.BRAND;
-  const s=ls(K.s); if(s&&s.email){const u=USERS.find(x=>x.email===s.email); if(u)return enter(u);}
+
+  await initSB();
+
+  // Whop sends them back here with ?status=success or ?status=error
+  const st=new URLSearchParams(location.search).get('status');
+  const note=document.getElementById('payNote');
+  if(st==='success'){
+    note.className='okbox';
+    note.innerHTML='<b>Payment confirmed.</b> Create your login below and you\'re in.';
+    gtab(0);
+    history.replaceState({},'',location.pathname);
+  } else if(st==='error'){
+    note.className='warnbox';
+    note.innerHTML='That payment didn\'t go through. Try again above, or message us and we\'ll sort it.';
+    history.replaceState({},'',location.pathname);
+  }
+
+  if(cloud()){
+    const {data}=await SB.auth.getSession();
+    if(data&&data.session) return enter(sbUser(data.session.user));
+  } else {
+    const s=ls(K.s); if(s&&s.email){const u=USERS.find(x=>x.email===s.email); if(u)return enter(u);}
+  }
 }
 function gtab(l){
   document.getElementById('paneL').classList.toggle('hide',!l);
@@ -663,21 +755,36 @@ function gtab(l){
   document.getElementById('tabL').classList.toggle('on',!!l);
   document.getElementById('tabS').classList.toggle('on',!l);
 }
-function doSignup(){
-  const e=document.getElementById('eS');e.className='err';
-  const c=document.getElementById('suC').value.trim(),n=document.getElementById('suN').value.trim(),
-        m=document.getElementById('suE').value.trim().toLowerCase(),p=document.getElementById('suP').value;
-  if(c.toUpperCase()!==String(CONFIG.ACCESS_CODE).toUpperCase())return e.textContent="That access code isn't right. It's on your confirmation page after payment.";
+async function doSignup(){
+  const e=document.getElementById('eS');e.className='err';e.textContent='';
+  const n=document.getElementById('suN').value.trim(),
+        m=document.getElementById('suE').value.trim().toLowerCase(),
+        p=document.getElementById('suP').value;
   if(!n)return e.textContent='Add your name.';
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m))return e.textContent="That email doesn't look right.";
   if(p.length<8)return e.textContent='Password needs at least 8 characters.';
+
+  if(cloud()){
+    const {data,error}=await SB.auth.signUp({email:m,password:p,options:{data:{name:n,done:[]}}});
+    if(error)return e.textContent=error.message;
+    if(!data.session)return e.textContent='Account made. Check your email to confirm, then log in. (Turn off "Confirm email" in Supabase to skip this.)';
+    return enter(sbUser(data.session.user));
+  }
   if(USERS.some(u=>u.email===m))return e.textContent="There's already an account on that email. Try logging in.";
   const u={name:n,email:m,pass:p,joined:new Date().toISOString()};
   USERS.push(u);saveU();localStorage.setItem(K.s,JSON.stringify({email:m}));enter(u);
 }
-function doLogin(){
-  const e=document.getElementById('eL');e.className='err';
-  const m=document.getElementById('liE').value.trim().toLowerCase(),p=document.getElementById('liP').value;
+
+async function doLogin(){
+  const e=document.getElementById('eL');e.className='err';e.textContent='';
+  const m=document.getElementById('liE').value.trim().toLowerCase(),
+        p=document.getElementById('liP').value;
+
+  if(cloud()){
+    const {data,error}=await SB.auth.signInWithPassword({email:m,password:p});
+    if(error)return e.textContent=error.message;
+    return enter(sbUser(data.user));
+  }
   const u=USERS.find(x=>x.email===m&&x.pass===p);
   if(!u)return e.textContent="Those details don't match an account here.";
   localStorage.setItem(K.s,JSON.stringify({email:m}));enter(u);
@@ -690,6 +797,7 @@ function askAdmin(){
       enter({name:'Admin',email:'admin mode',pass:''}); }});
 }
 function enter(u){
+  if(cloud()&&Array.isArray(u.done))DONE=u.done;
   document.getElementById('gate').classList.add('hide');
   document.getElementById('app').classList.remove('hide');
   document.getElementById('whoN').textContent=u.name;
@@ -697,7 +805,8 @@ function enter(u){
   document.getElementById('avI').textContent=(u.name||'?').trim().charAt(0).toUpperCase();
   render();
 }
-function logout(){
+async function logout(){
+  if(cloud()&&!isAdmin){ try{ await SB.auth.signOut(); }catch(e){} }
   localStorage.removeItem(K.s);isAdmin=false;document.body.classList.remove('admin');
   document.getElementById('app').classList.add('hide');
   document.getElementById('gate').classList.remove('hide');scrollTo(0,0);
@@ -712,7 +821,9 @@ function go(t){
 function render(){
   const v=document.getElementById('view');
   const bar='<div id="abar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:16px;height:16px"><path d="M12 3l8 4v6c0 4-3.5 7-8 8-4.5-1-8-4-8-8V7l8-4z"/></svg>'+
-    '<span class="sp">Admin mode. Edits save to this browser only. Hit Export when done, then paste over the DEFAULT_DATA block.</span>'+
+    '<span class="sp"><b>Admin mode. Your edits are NOT live yet.</b> They only exist in this browser until you '+
+    'hit Export site data, paste it over the DEFAULT_DATA block in the file, and re-upload. Skip that step and '+
+    'the changes vanish on any other browser or device.</span>'+
     '<button onclick="exportData()">Export site data</button><button onclick="logout()">Exit</button></div>';
   v.innerHTML=bar+({modules:vModules,recordings:vRec,assets:vAssets,community:vComm}[tab])();
   updProg();
@@ -762,7 +873,12 @@ function vModules(){
   return h;
 }
 function tog(i){openMod=openMod===i?null:i;render()}
-function mark(n){const i=DONE.indexOf(n);i<0?DONE.push(n):DONE.splice(i,1);saveP();render();toast(i<0?'Nice. Module complete.':'Unmarked')}
+function mark(n){
+  const i=DONE.indexOf(n); i<0?DONE.push(n):DONE.splice(i,1);
+  saveP();
+  if(cloud()&&!isAdmin){ SB.auth.updateUser({data:{done:DONE}}).catch(()=>{}); }
+  render(); toast(i<0?'Nice. Module complete.':'Unmarked');
+}
 function cpP(i){navigator.clipboard.writeText(DATA.modules[i].prompt).then(()=>toast('Prompt copied'))}
 function edVid(i){modal({title:'Module video',help:'Paste a Loom, Fathom, YouTube, Vimeo or Drive link. It converts to an embed automatically.',
   fields:[{k:'u',l:'Video link',val:DATA.modules[i].video}],cta:'Save',
