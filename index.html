@@ -98,113 +98,166 @@ const WHOP = {
 <script>
 /* DATA_START */
 const DEFAULT_DATA = {
-  modules: [
-    { part:"Choose It", n:1, title:"Find Your Lane",
-      sub:"The six services, and which one is actually yours", video:"",
-      points:[
+  "modules": [
+    {
+      "part": "Choose It",
+      "n": 1,
+      "title": "Find Your Lane",
+      "sub": "The six services, and which one is actually yours",
+      "video": "",
+      "points": [
         "The six non-medical services: home care, medical transportation, adult day, shared living, respite, community integration",
         "The four filters: your experience, your budget, your state, the population you want to serve",
         "Why almost everyone defaults to home care, and when that's the wrong call",
         "Ruling services out on purpose instead of picking by elimination"
       ],
-      prompt:"I have [X] years of experience as a [role] in [setting]. I live in [state], in [county]. I have roughly [$amount] to invest and I want to be earning [$goal] a month. The population I most want to work with is [population].\n\nCompare these six non-medical healthcare services for my situation: home care, non-emergency medical transportation, adult day services, shared living, respite care, community integration.\n\nFor each one tell me: how well it fits my experience, roughly how capital intensive it is to start, whether it needs staff from day one, and who typically pays for it. Then rank them best to worst fit for me and explain the top two in detail.\n\nDo not tell me my state's exact licensing requirements. I will verify those directly with the state.",
-      call:"Walk through the six services out loud, one at a time, with a real example of who each suits. Then have her say which two she's between and why. Do not let her leave the call without narrowing to two." },
-
-    { part:"Choose It", n:2, title:"Validate the Opportunity",
-      sub:"Who needs it, who pays, who controls the referrals", video:"",
-      points:[
+      "prompt": "I have [X] years of experience as a [role] in [setting]. I live in [state], in [county]. I have roughly [$amount] to invest and I want to be earning [$goal] a month. The population I most want to work with is [population].\n\nCompare these six non-medical healthcare services for my situation: home care, non-emergency medical transportation, adult day services, shared living, respite care, community integration.\n\nFor each one tell me: how well it fits my experience, roughly how capital intensive it is to start, whether it needs staff from day one, and who typically pays for it. Then rank them best to worst fit for me and explain the top two in detail.\n\nDo not tell me my state's exact licensing requirements. I will verify those directly with the state.",
+      "call": "Walk through the six services out loud, one at a time, with a real example of who each suits. Then have her say which two she's between and why. Do not let her leave the call without narrowing to two."
+    },
+    {
+      "part": "Choose It",
+      "n": 2,
+      "title": "Validate the Opportunity",
+      "sub": "Who needs it, who pays, who controls the referrals",
+      "video": "",
+      "points": [
         "Finding out whether there is real demand in your county before you spend anything",
         "Who pays: private pay, Medicaid, VA, contracts, or a mix",
         "Who actually controls the referrals, and why that person matters more than your marketing",
         "Reading local saturation honestly instead of hoping"
       ],
-      prompt:"I'm planning to start a [service] business in [county, state]. My intended population is [population].\n\nHelp me build a validation plan. I want to find out: who in my area needs this service, who pays for it, which organizations or roles control the referrals, how many providers already serve this population locally, and what the realistic private-pay rate range is.\n\nGive me a list of specific places to look and specific people to call, plus the exact questions to ask them. Flag anything I should verify with an official source rather than take from you.",
-      call:"Have her name three real referral sources in her county by name, not by category. If she can't, that's the homework before the next call." },
-
-    { part:"Choose It", n:3, title:"Map the Money",
-      sub:"Startup costs, pricing, and your break-even client count", video:"",
-      points:[
+      "prompt": "I'm planning to start a [service] business in [county, state]. My intended population is [population].\n\nHelp me build a validation plan. I want to find out: who in my area needs this service, who pays for it, which organizations or roles control the referrals, how many providers already serve this population locally, and what the realistic private-pay rate range is.\n\nGive me a list of specific places to look and specific people to call, plus the exact questions to ask them. Flag anything I should verify with an official source rather than take from you.",
+      "call": "Have her name three real referral sources in her county by name, not by category. If she can't, that's the homework before the next call."
+    },
+    {
+      "part": "Choose It",
+      "n": 3,
+      "title": "Map the Money",
+      "sub": "Startup costs, pricing, and your break-even client count",
+      "video": "",
+      "points": [
         "Choosing your payer model and what each one costs you in cash-flow delay",
         "Real startup costs versus the ones people forget: insurance, software, background checks",
         "Monthly operating costs before your first dollar comes in",
         "Break-even: exactly how many clients before this replaces your paycheck"
       ],
-      prompt:"I'm starting a [service] business in [state]. My payer model will be [private pay / Medicaid / mixed]. I expect to charge [rate] or be reimbursed at roughly [rate].\n\nBuild me a startup and operating budget. Include formation, insurance, software, background checks, marketing, and any staffing I'd need in month one. Then calculate my monthly break-even and how many clients that equals.\n\nShow the math so I can change the numbers myself. Tell me which figures I need to confirm with a real quote rather than an estimate.",
-      call:"Get her actual break-even number said out loud on the call. Most people have never calculated it and the number is usually far smaller and less frightening than they assumed." },
-
-    { part:"Build It", n:4, title:"Build the Foundation",
-      sub:"Formation, EIN, banking, insurance, in the right order", video:"",
-      points:[
+      "prompt": "I'm starting a [service] business in [state]. My payer model will be [private pay / Medicaid / mixed]. I expect to charge [rate] or be reimbursed at roughly [rate].\n\nBuild me a startup and operating budget. Include formation, insurance, software, background checks, marketing, and any staffing I'd need in month one. Then calculate my monthly break-even and how many clients that equals.\n\nShow the math so I can change the numbers myself. Tell me which figures I need to confirm with a real quote rather than an estimate.",
+      "call": "Get her actual break-even number said out loud on the call. Most people have never calculated it and the number is usually far smaller and less frightening than they assumed."
+    },
+    {
+      "part": "Build It",
+      "n": 4,
+      "title": "Build the Foundation",
+      "sub": "Formation, EIN, banking, insurance, in the right order",
+      "video": "",
+      "points": [
         "Why the LLC is step four and not step one",
         "Entity choice, EIN, and a business bank account that won't cause problems later",
         "General liability and professional liability: what referral partners actually ask to see",
         "The order that means you build once instead of paying twice"
       ],
-      prompt:"I'm forming a [service] business in [state] and I've already chosen my service and confirmed my payer.\n\nGive me a step-by-step setup checklist in the correct order: entity formation, EIN, business banking, insurance types I'll need, and any registrations that apply to a non-medical healthcare service business.\n\nFor each step tell me what it typically costs, roughly how long it takes, and what it unlocks that I can't do without it. Mark clearly which steps I must confirm with my state or a licensed professional.",
-      call:"Screen-share and do the first two steps live with her. Momentum on this module is worth more than information." },
-
-    { part:"Build It", n:5, title:"Licensing & Compliance",
-      sub:"Finding and following your state's actual path", video:"",
-      points:[
+      "prompt": "I'm forming a [service] business in [state] and I've already chosen my service and confirmed my payer.\n\nGive me a step-by-step setup checklist in the correct order: entity formation, EIN, business banking, insurance types I'll need, and any registrations that apply to a non-medical healthcare service business.\n\nFor each step tell me what it typically costs, roughly how long it takes, and what it unlocks that I can't do without it. Mark clearly which steps I must confirm with my state or a licensed professional.",
+      "call": "Screen-share and do the first two steps live with her. Momentum on this module is worth more than information."
+    },
+    {
+      "part": "Build It",
+      "n": 5,
+      "title": "Licensing & Compliance",
+      "sub": "Finding and following your state's actual path",
+      "video": "",
+      "points": [
         "How to find your state's real requirements instead of trusting a Facebook group",
         "Licence, certification, or neither: it depends entirely on service and state",
         "Reading an application before you start filling it in",
         "The most common reasons applications get kicked back"
       ],
-      prompt:"I'm starting a [service] business in [state]. I need to research the licensing or certification path myself from primary sources.\n\nTell me which types of agency or department typically govern this service, what the application process usually involves at a high level, and what documents are commonly required.\n\nThen give me a script for calling the state agency: who to ask for, what to ask, and how to confirm I've got the right requirements for my exact service. Do not give me specific rules, deadlines or dollar figures for my state. I will get those from the source.",
-      call:"Do not read state requirements to her from memory. Get her on the phone with her state agency during the call if you can. That single phone call is often the whole module." },
-
-    { part:"Build It", n:6, title:"Install the Box",
-      sub:"Policies, intake, agreements, care plans, systems", video:"",
-      points:[
+      "prompt": "I'm starting a [service] business in [state]. I need to research the licensing or certification path myself from primary sources.\n\nTell me which types of agency or department typically govern this service, what the application process usually involves at a high level, and what documents are commonly required.\n\nThen give me a script for calling the state agency: who to ask for, what to ask, and how to confirm I've got the right requirements for my exact service. Do not give me specific rules, deadlines or dollar figures for my state. I will get those from the source.",
+      "call": "Do not read state requirements to her from memory. Get her on the phone with her state agency during the call if you can. That single phone call is often the whole module."
+    },
+    {
+      "part": "Build It",
+      "n": 6,
+      "title": "Install the Box",
+      "sub": "Policies, intake, agreements, care plans, systems",
+      "video": "",
+      "points": [
         "Customizing the document set to your one service instead of using it generic",
         "Intake forms, client agreements, assessments and care plans",
         "Employee documents, background checks, onboarding",
         "Scheduling, documentation and billing: an operating system, not a folder"
       ],
-      prompt:"I run a [service] business in [state] serving [population]. I have a set of template policies, intake forms, client agreements, care plans and employee documents.\n\nAct as an operations reviewer. For each document type, tell me what needs to change to be specific to my service and my population rather than generic. Ask me questions where you need information from me.\n\nThen give me an order to work through them in, starting with the ones I'd need first to take on a single client.",
-      call:"Pick one document and customize it together on the call. She'll do the other twelve herself once she's seen how one is done." },
-
-    { part:"Fill It", n:7, title:"Become Referral-Ready",
-      sub:"What a case manager needs before they'll place with you", video:"",
-      points:[
+      "prompt": "I run a [service] business in [state] serving [population]. I have a set of template policies, intake forms, client agreements, care plans and employee documents.\n\nAct as an operations reviewer. For each document type, tell me what needs to change to be specific to my service and my population rather than generic. Ask me questions where you need information from me.\n\nThen give me an order to work through them in, starting with the ones I'd need first to take on a single client.",
+      "call": "Pick one document and customize it together on the call. She'll do the other twelve herself once she's seen how one is done."
+    },
+    {
+      "part": "Fill It",
+      "n": 7,
+      "title": "Become Referral-Ready",
+      "sub": "What a case manager needs before they'll place with you",
+      "video": "",
+      "points": [
         "Your service and population statement in one sentence",
         "The referral packet and the capacity sheet",
         "A defined intake process and a response-time standard you actually hold to",
         "Why response time beats marketing every single time"
       ],
-      prompt:"I run a [service] business in [county, state] serving [population]. I have capacity for [number] clients right now.\n\nHelp me build a referral packet. I need: a one-sentence service and population statement, a one-page overview a case manager could scan in 30 seconds, a capacity sheet, my intake process written out, and a response-time commitment.\n\nThen write me three outreach scripts: one for a phone call, one for an in-person drop-in, one for email. Professional, short, no salesy language.",
-      call:"Have her read her one-sentence statement out loud. If it takes more than one breath, it isn't done." },
-
-    { part:"Fill It", n:8, title:"Pursue the First Client",
-      sub:"A weekly plan, not waiting by the phone", video:"",
-      points:[
+      "prompt": "I run a [service] business in [county, state] serving [population]. I have capacity for [number] clients right now.\n\nHelp me build a referral packet. I need: a one-sentence service and population statement, a one-page overview a case manager could scan in 30 seconds, a capacity sheet, my intake process written out, and a response-time commitment.\n\nThen write me three outreach scripts: one for a phone call, one for an in-person drop-in, one for email. Professional, short, no salesy language.",
+      "call": "Have her read her one-sentence statement out loud. If it takes more than one breath, it isn't done."
+    },
+    {
+      "part": "Fill It",
+      "n": 8,
+      "title": "Pursue the First Client",
+      "sub": "A weekly plan, not waiting by the phone",
+      "video": "",
+      "points": [
         "Building your referral source list and working it weekly",
         "Outreach, follow-up, and tracking every conversation",
         "Provider meetings and community events that actually produce referrals",
         "Refining the offer off real feedback instead of guessing"
       ],
-      prompt:"I'm ready to take clients for my [service] business in [county, state]. My referral sources are [list them].\n\nBuild me a weekly client acquisition plan: how many outreach contacts, how many follow-ups, which events to attend, and what to track. Assume I'm still working [hours] a week at my job, so it has to be realistic.\n\nThen build me a simple tracker layout: what columns I need to log every conversation and know what to do next.",
-      call:"Set her weekly contact number together and write it down. Then hold her to it on every future call. This is the module where people quietly stop, so accountability matters more than content." }
+      "prompt": "I'm ready to take clients for my [service] business in [county, state]. My referral sources are [list them].\n\nBuild me a weekly client acquisition plan: how many outreach contacts, how many follow-ups, which events to attend, and what to track. Assume I'm still working [hours] a week at my job, so it has to be realistic.\n\nThen build me a simple tracker layout: what columns I need to log every conversation and know what to do next.",
+      "call": "Set her weekly contact number together and write it down. Then hold her to it on every future call. This is the module where people quietly stop, so accountability matters more than content."
+    }
   ],
-
-  recordings: [],
-
-  assets: [
-    { name:"Startup Checklist", cat:"Start Here", ico:"✅", url:"",
-      desc:"The order of operations on one page. Print it and work down it." },
-    { name:"Niche Finder", cat:"Start Here", ico:"🧭", url:"",
-      desc:"Scores the six services against your experience, budget, state and population." },
-    { name:"Contracts & Forms Bundle", cat:"Documents", ico:"📄", url:"",
-      desc:"Policies, intake forms, client agreements, care plans, employee documents." },
-    { name:"Setup Blueprint", cat:"Documents", ico:"🗂️", url:"",
-      desc:"The full build sequence: formation through referral ready." }
+  "recordings": [],
+  "assets": [
+    {
+      "name": "Startup Checklist",
+      "cat": "Start Here",
+      "ico": "✅",
+      "url": "https://www.instagram.com/explore/",
+      "desc": "The order of operations on one page. Print it and work down it."
+    },
+    {
+      "name": "Niche Finder",
+      "cat": "Start Here",
+      "ico": "🧭",
+      "url": "",
+      "desc": "Scores the six services against your experience, budget, state and population."
+    },
+    {
+      "name": "Contracts & Forms Bundle",
+      "cat": "Documents",
+      "ico": "📄",
+      "url": "",
+      "desc": "Policies, intake forms, client agreements, care plans, employee documents."
+    },
+    {
+      "name": "Setup Blueprint",
+      "cat": "Documents",
+      "ico": "🗂️",
+      "url": "",
+      "desc": "The full build sequence: formation through referral ready."
+    }
   ],
-
-  calls: [],
-
-  community: { phone:"", slack:"", booking:"",
-    note:"Support Monday to Wednesday, 10am to 4pm." }
+  "calls": [],
+  "community": {
+    "phone": "",
+    "slack": "",
+    "booking": "",
+    "note": "Support Monday to Wednesday, 10am to 4pm."
+  }
 };
 /* DATA_END */
 </script>
