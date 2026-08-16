@@ -41,6 +41,34 @@ const SUPABASE = {
 };
 
 /* ==================================================================
+   GITHUB PUBLISHING  —  makes "Publish changes" work in admin mode
+
+   With this filled in, admin edits commit straight back to your repo
+   and GitHub Pages redeploys in about 30 seconds. No exporting, no
+   pasting, no re-uploading.
+
+   NOTE: there is deliberately no token here. Your repo is public and
+   GitHub automatically revokes any personal access token it finds in
+   a public repo, so a hardcoded one would stop working almost
+   immediately. Instead you paste the token when you enter admin mode
+   and it lives in that browser tab only.
+
+   Setup:
+     GitHub > Settings > Developer settings > Personal access tokens
+       > Fine-grained tokens > Generate new
+     Repository access : Only select repositories > this repo only
+     Permissions       : Contents > Read and write   (nothing else)
+     Expiration        : set one, and diary a reminder to rotate it
+   Then keep the token in your password manager.
+   ================================================================== */
+const GITHUB = {
+  OWNER:  "saif-collab",
+  REPO:   "healthcareinabox",
+  PATH:   "index.html",
+  BRANCH: "main"
+};
+
+/* ==================================================================
    WHOP CHECKOUT TEMPLATE
    To swap the product, change PLAN_ID only. Nothing else.
 
@@ -68,6 +96,7 @@ const WHOP = {
      2. DEFAULT_DATA  —  after Export site data, paste over this block
      ================================================================== -->
 <script>
+/* DATA_START */
 const DEFAULT_DATA = {
   modules: [
     { part:"Choose It", n:1, title:"Find Your Lane",
@@ -177,6 +206,7 @@ const DEFAULT_DATA = {
   community: { phone:"", slack:"", booking:"",
     note:"Support Monday to Wednesday, 10am to 4pm." }
 };
+/* DATA_END */
 </script>
 
 <style>
@@ -653,10 +683,13 @@ const K={d:'hbx_d1',u:'hbx_u1',s:'hbx_s1',p:'hbx_p1'};
 let DATA=ls(K.d)||JSON.parse(JSON.stringify(DEFAULT_DATA));
 let USERS=ls(K.u)||[];
 let DONE=ls(K.p)||[];
-let isAdmin=false,tab='modules',openMod=null,chip='All';
+let isAdmin=false,tab='modules',openMod=null,chip='All',DIRTY=0;
+
+// warn if you close the tab with edits that were never published
+addEventListener('beforeunload',e=>{ if(isAdmin&&DIRTY>0){ e.preventDefault(); e.returnValue=''; } });
 
 function ls(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
-function save(){localStorage.setItem(K.d,JSON.stringify(DATA))}
+function save(){localStorage.setItem(K.d,JSON.stringify(DATA));DIRTY++;}
 function saveU(){localStorage.setItem(K.u,JSON.stringify(USERS))}
 function saveP(){localStorage.setItem(K.p,JSON.stringify(DONE))}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -821,9 +854,13 @@ function go(t){
 function render(){
   const v=document.getElementById('view');
   const bar='<div id="abar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:16px;height:16px"><path d="M12 3l8 4v6c0 4-3.5 7-8 8-4.5-1-8-4-8-8V7l8-4z"/></svg>'+
-    '<span class="sp"><b>Admin mode. Your edits are NOT live yet.</b> They only exist in this browser until you '+
-    'hit Export site data, paste it over the DEFAULT_DATA block in the file, and re-upload. Skip that step and '+
-    'the changes vanish on any other browser or device.</span>'+
+    '<span class="sp">'+(ghCfg()
+      ? (DIRTY>0
+          ? '<b>'+DIRTY+' change'+(DIRTY===1?'':'s')+' not published yet.</b> Nobody else can see them until you hit Publish.'
+          : '<b>Admin mode.</b> Everything is published. Make an edit and a Publish button appears here.')
+      : '<b>Admin mode. Edits are NOT live.</b> Fill in the GITHUB block at the top of this file to enable one-click publishing, or use Export site data.')+
+    '</span>'+
+    (ghCfg()&&DIRTY>0?'<button onclick="publish(this)">Publish changes</button>':'')+
     '<button onclick="exportData()">Export site data</button><button onclick="logout()">Exit</button></div>';
   v.innerHTML=bar+({modules:vModules,recordings:vRec,assets:vAssets,community:vComm}[tab])();
   updProg();
@@ -993,6 +1030,94 @@ function modal(o){
 let tt;
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
   clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2000)}
+/* ================= github publishing ================= */
+const TOK_KEY='hbx_ghtok';
+function ghCfg(){ return !!(typeof GITHUB!=='undefined' && GITHUB.OWNER && GITHUB.REPO); }
+function ghTok(){ try{ return sessionStorage.getItem(TOK_KEY)||''; }catch(e){ return ''; } }
+
+function b64enc(s){
+  const bytes=new TextEncoder().encode(s);
+  let bin=''; for(const b of bytes) bin+=String.fromCharCode(b);
+  return btoa(bin);
+}
+function b64dec(b64){
+  const bin=atob(String(b64).replace(/\s/g,''));
+  const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
+function askToken(then){
+  modal({title:'GitHub token',
+    help:'Paste your fine-grained token. It stays in this browser tab only, is never written into the file, and is gone when you close the tab.',
+    fields:[{k:'t',l:'Token',type:'password'}], cta:'Use for this session',
+    onOk:v=>{
+      const t=(v.t||'').trim();
+      if(!t) return 'Paste the token.';
+      try{ sessionStorage.setItem(TOK_KEY,t); }catch(e){}
+      if(then) setTimeout(then,0);
+    }});
+}
+
+function pubFail(msg){
+  modal({title:'Publish failed', help:msg+'  Your edits are still here, nothing was lost. Try again, or use Export site data as a fallback.',
+    fields:[], cta:'OK', onOk:()=>{}});
+}
+
+async function publish(btn){
+  if(!ghCfg()) return modal({title:'GitHub not set up yet',
+    help:'Open this file, find the GITHUB block near the top, and fill in OWNER and REPO. Then reload and try again.',
+    fields:[], cta:'OK', onOk:()=>{}});
+
+  const tok=ghTok();
+  if(!tok) return askToken(()=>publish(btn));
+
+  const set=t=>{ if(btn) btn.textContent=t; };
+  const api='https://api.github.com/repos/'+GITHUB.OWNER+'/'+GITHUB.REPO+'/contents/'+GITHUB.PATH;
+  const h={Authorization:'Bearer '+tok, Accept:'application/vnd.github+json'};
+  set('Publishing...');
+
+  try{
+    const g=await fetch(api+(GITHUB.BRANCH?'?ref='+encodeURIComponent(GITHUB.BRANCH):''),{headers:h});
+    if(g.status===401||g.status===403){
+      try{ sessionStorage.removeItem(TOK_KEY); }catch(e){}
+      throw new Error('GitHub rejected that token. Check it has not expired and that it has Contents: Read and write on this repo. You will be asked for it again next time.');
+    }
+    if(g.status===404) throw new Error('Could not find '+GITHUB.OWNER+'/'+GITHUB.REPO+'/'+GITHUB.PATH+' on branch '+GITHUB.BRANCH+'. Check the GITHUB block at the top of this file.');
+    if(!g.ok) throw new Error('GitHub returned '+g.status+' when reading the file.');
+
+    const meta=await g.json();
+    const src=b64dec(meta.content);
+    const marks=/\/\* DATA_START \*\/[\s\S]*?\/\* DATA_END \*\//;
+    if(!marks.test(src)) throw new Error('The live file does not have the DATA_START marker in it, so there is nothing safe to replace. It is probably an older copy. Upload this version once by hand, then publishing will work from then on.');
+
+    // built piecewise on purpose, so the literal markers never appear in this file twice
+    const M1='/*'+' DATA_START '+'*/', M2='/*'+' DATA_END '+'*/';
+    const block=M1+'\nconst DEFAULT_DATA = '+JSON.stringify(DATA,null,2)+';\n'+M2;
+    const out=src.replace(marks,()=>block);
+
+    const msg='Portal update: '+DATA.modules.filter(m=>m.video).length+' videos, '+
+      DATA.assets.length+' assets, '+DATA.recordings.length+' recordings, '+DATA.calls.length+' calls';
+
+    const body={message:msg, content:b64enc(out), sha:meta.sha};
+    if(GITHUB.BRANCH) body.branch=GITHUB.BRANCH;
+
+    const p=await fetch(api,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},h),body:JSON.stringify(body)});
+    if(p.status===409) throw new Error('The file changed on GitHub since this page loaded. Hit Publish once more and it will pick up the newer version.');
+    if(!p.ok){
+      let m='GitHub returned '+p.status+' when saving.';
+      try{ const e=await p.json(); if(e && e.message) m=e.message; }catch(e){}
+      throw new Error(m);
+    }
+
+    DIRTY=0;
+    toast('Published. Live in about 30 seconds.');
+    render();
+  }catch(e){
+    set('Publish changes');
+    pubFail(e.message||'Something went wrong talking to GitHub.');
+  }
+}
+
 function exportData(){
   const out='const DEFAULT_DATA = '+JSON.stringify(DATA,null,2)+';';
   navigator.clipboard.writeText(out).then(()=>{
