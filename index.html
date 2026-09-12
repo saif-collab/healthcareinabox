@@ -839,6 +839,7 @@ function render(){
       : '<b>Admin mode. Edits are NOT live.</b> Fill in the GITHUB block at the top of this file to enable one-click publishing, or use Export site data.')+
     '</span>'+
     (ghCfg()&&DIRTY>0?'<button onclick="publish(this)">Publish changes</button>':'')+
+    '<button onclick="resetLocal()">Reload published</button>'+
     '<button onclick="exportData()">Export site data</button><button onclick="logout()">Exit</button></div>';
   v.innerHTML=bar+({modules:vModules,recordings:vRec,assets:vAssets,community:vComm,members:vMembers}[tab]||vModules)();
   updProg();
@@ -987,11 +988,24 @@ function addMember(){
       if(!lab) return 'Give it a label so you know who it is.';
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return 'That email does not look right.';
       if(pw.length<6) return 'Password needs at least 6 characters.';
-      credHash(em,pw).then(h=>{
+      credHash(em,pw).then(async h=>{
         if((DATA.members||[]).some(x=>x.hash===h)){ toast('That exact email and password already exists.'); return; }
         DATA.members=DATA.members||[];
         DATA.members.push({label:lab, hash:h, added:new Date().toISOString(), done:[]});
         save(); render();
+
+        // An account that is not published does not exist for anybody else,
+        // so push it live BEFORE handing over the credentials.
+        if(ghCfg()){
+          toast('Publishing the new account...');
+          const ok=await publish(null);
+          if(!ok){
+            modal({title:'Account created but NOT live yet',
+              help:'The account is saved in this browser but the publish to GitHub did not go through, so '+lab+' cannot log in yet. Fix the error above, then hit Publish changes. Do not send them their password until it has published.',
+              fields:[], cta:'OK', onOk:()=>{}});
+            return;
+          }
+        }
         setTimeout(()=>showCreds(lab,em,pw),60);
       });
     }});
@@ -1001,8 +1015,8 @@ function showCreds(lab,em,pw){
   const site=location.origin+location.pathname;
   const txt="You're in. Here's your login for Healthcare in a Box:\n\n"+
     site+"\n\nEmail: "+em+"\nPassword: "+pw+"\n\nLog in and start with Module 1. Any trouble, just message me.";
-  modal({title:'Account created for '+lab,
-    help:'Copy this and send it to them. This is the only time you will see the password.',
+  modal({title:'Live. Account created for '+lab,
+    help:'Published to GitHub, so this login works on any device in about 30 seconds. Copy the message and send it. This is the only time you will see the password.',
     fields:[{k:'m',l:'Message to send',val:txt,ta:1}],
     cta:'Copy and close',
     onOk:v=>{ navigator.clipboard.writeText(v.m).then(()=>toast('Copied. Now hit Publish changes.')); }});
@@ -1012,7 +1026,11 @@ function delMember(i){
   const m=DATA.members[i];
   modal({title:'Revoke access?', help:'This removes '+(m.label||'this member')+'. They will be logged out and cannot get back in. It cannot be undone.',
     fields:[], cta:'Revoke',
-    onOk:()=>{ DATA.members.splice(i,1); save(); render(); toast('Revoked. Hit Publish changes to make it stick.'); }});
+    onOk:()=>{
+      DATA.members.splice(i,1); save(); render();
+      if(ghCfg()) publish(null).then(ok=>toast(ok?'Revoked and published.':'Removed here, but the publish failed. Hit Publish changes.'));
+      else toast('Revoked. Hit Publish changes to make it stick.');
+    }});
 }
 
 /* ================= community ================= */
@@ -1076,6 +1094,16 @@ function modal(o){
 let tt;
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
   clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2000)}
+/* Your browser keeps its own working copy of the data. After you upload a new
+   version of this file by hand, that cached copy is what you still see. This
+   throws it away and loads whatever is actually published. */
+function resetLocal(){
+  modal({title:'Reload the published version?',
+    help:'This discards any unpublished edits in this browser and loads exactly what is live in the file. Use it after uploading a new version by hand.',
+    fields:[], cta:'Reload',
+    onOk:()=>{ localStorage.removeItem(K.d); location.reload(); }});
+}
+
 /* ================= github publishing ================= */
 const TOK_KEY='hbx_ghtok';
 function ghCfg(){ return !!(typeof GITHUB!=='undefined' && GITHUB.OWNER && GITHUB.REPO); }
@@ -1110,12 +1138,15 @@ function pubFail(msg){
 }
 
 async function publish(btn){
-  if(!ghCfg()) return modal({title:'GitHub not set up yet',
+  if(!ghCfg()){ modal({title:'GitHub not set up yet',
     help:'Open this file, find the GITHUB block near the top, and fill in OWNER and REPO. Then reload and try again.',
-    fields:[], cta:'OK', onOk:()=>{}});
+    fields:[], cta:'OK', onOk:()=>{}}); return false; }
 
-  const tok=ghTok();
-  if(!tok) return askToken(()=>publish(btn));
+  let tok=ghTok();
+  if(!tok){
+    tok=await new Promise(res=>askToken(()=>res(ghTok())));
+    if(!tok) return false;
+  }
 
   const set=t=>{ if(btn) btn.textContent=t; };
   const api='https://api.github.com/repos/'+GITHUB.OWNER+'/'+GITHUB.REPO+'/contents/'+GITHUB.PATH;
@@ -1158,9 +1189,11 @@ async function publish(btn){
     DIRTY=0;
     toast('Published. Live in about 30 seconds.');
     render();
+    return true;
   }catch(e){
     set('Publish changes');
     pubFail(e.message||'Something went wrong talking to GitHub.');
+    return false;
   }
 }
 
