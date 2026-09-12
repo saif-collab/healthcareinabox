@@ -87,203 +87,356 @@ const GITHUB = {
 <script>
 /* DATA_START */
 const DEFAULT_DATA = {
-  modules: [
-    { part:"Set It Up", n:1, title:"Why Most People Stay Stuck",
-      sub:"Start here. The reason this usually goes wrong.",
-      video:"https://drive.google.com/file/d/1GBy1Mq9xe0EBtPTy13N-rR5aO41ZVyXD/view",
-      points:[
+  "modules": [
+    {
+      "part": "Set It Up",
+      "n": 1,
+      "title": "Why Most People Stay Stuck",
+      "sub": "Start here. The reason this usually goes wrong.",
+      "video": "https://drive.google.com/file/d/1GBy1Mq9xe0EBtPTy13N-rR5aO41ZVyXD/view",
+      "points": [
         "Why knowing how to care for people is not the same as knowing how to run an agency",
         "The order everything has to happen in, and what it costs when you get it wrong",
         "What to stop doing before you spend another dollar",
         "Read 00 . START HERE in the Assets tab alongside this module"
       ],
-      prompt:"I have [X] years of experience as a [role] in [setting]. I live in [state]. I want to start my own non-medical home care business and I have roughly [$amount] to get going.\n\nBased on that, list the first five things I should do in order, and the five things people in my position usually do first that turn out to be a waste of time or money.\n\nBe blunt. Do not tell me my state's licensing requirements, I will confirm those directly with the state.",
-      call:"Get her to say out loud what she has already spent money on and what she has already tried. That tells you which module she actually needs to start on, and it is rarely module one." },
-
-    { part:"Set It Up", n:2, title:"Name Your Business",
-      sub:"Pick a name you will not have to change later",
-      video:"https://drive.google.com/file/d/1O4kCf1Dn6O_QyxKISNCaUUIQKIqsf6AM/view",
-      points:[
+      "prompt": "I have [X] years of experience as a [role] in [setting]. I live in [state]. I want to start my own non-medical home care business and I have roughly [$amount] to get going.\n\nBased on that, list the first five things I should do in order, and the five things people in my position usually do first that turn out to be a waste of time or money.\n\nBe blunt. Do not tell me my state's licensing requirements, I will confirm those directly with the state.",
+      "call": "Get her to say out loud what she has already spent money on and what she has already tried. That tells you which module she actually needs to start on, and it is rarely module one."
+    },
+    {
+      "part": "Set It Up",
+      "n": 2,
+      "title": "Name Your Business",
+      "sub": "Pick a name you will not have to change later",
+      "video": "https://drive.google.com/file/d/1O4kCf1Dn6O_QyxKISNCaUUIQKIqsf6AM/view",
+      "points": [
         "What makes a name brandable instead of forgettable",
         "Checking the name is actually free before you fall in love with it",
         "Names that box you into one service when you might add more later",
         "Matching the name to the population you want to serve"
       ],
-      prompt:"I am starting a non-medical home care business in [state], serving [population].\n\nGive me 20 name options. For each one tell me in a few words why it works. Mix warm and personal names with clean professional ones.\n\nAvoid anything that locks me into only one service, anything hard to spell out loud on the phone, and anything that sounds clinical or medical.\n\nThen tell me exactly how to check whether each name is already taken.",
-      call:"Have her shortlist three on the call and check availability live. People stall on naming for weeks if you let them leave without deciding." },
-
-    { part:"Set It Up", n:3, title:"Choose Your Structure",
-      sub:"LLC, sole proprietor, and what the difference actually means",
-      video:"https://drive.google.com/file/d/1a1b2AnuuOKy0KsEzoREhAIsiqdggkzpd/view",
-      points:[
+      "prompt": "I am starting a non-medical home care business in [state], serving [population].\n\nGive me 20 name options. For each one tell me in a few words why it works. Mix warm and personal names with clean professional ones.\n\nAvoid anything that locks me into only one service, anything hard to spell out loud on the phone, and anything that sounds clinical or medical.\n\nThen tell me exactly how to check whether each name is already taken.",
+      "call": "Have her shortlist three on the call and check availability live. People stall on naming for weeks if you let them leave without deciding."
+    },
+    {
+      "part": "Set It Up",
+      "n": 3,
+      "title": "Choose Your Structure",
+      "sub": "LLC, sole proprietor, and what the difference actually means",
+      "video": "https://drive.google.com/file/d/1a1b2AnuuOKy0KsEzoREhAIsiqdggkzpd/view",
+      "points": [
         "What each structure means for your personal liability",
         "Why the structure matters more in healthcare than in most businesses",
         "When a single-member LLC is enough and when it is not",
         "Getting this right the first time instead of restructuring later"
       ],
-      prompt:"I am forming a non-medical home care business in [state]. I will be [the only owner / partnering with someone].\n\nExplain the practical differences between the common business structures for a business like mine, in plain English. Focus on liability, tax treatment and paperwork load.\n\nDo not tell me which one to choose and do not give me legal or tax advice. Tell me what questions to ask an attorney or accountant in my state.",
-      call:"This is where partnership questions come up. If she is going in with somebody, that conversation happens now, not after money is involved." },
-
-    { part:"Set It Up", n:4, title:"Register Your Business",
-      sub:"Filing, EIN, and getting legally real",
-      video:"https://drive.google.com/file/d/13Hst9XZwA8NPV306yFbLqztISlBc7LvG/view",
-      points:[
+      "prompt": "I am forming a non-medical home care business in [state]. I will be [the only owner / partnering with someone].\n\nExplain the practical differences between the common business structures for a business like mine, in plain English. Focus on liability, tax treatment and paperwork load.\n\nDo not tell me which one to choose and do not give me legal or tax advice. Tell me what questions to ask an attorney or accountant in my state.",
+      "call": "This is where partnership questions come up. If she is going in with somebody, that conversation happens now, not after money is involved."
+    },
+    {
+      "part": "Set It Up",
+      "n": 4,
+      "title": "Register Your Business",
+      "sub": "Filing, EIN, and getting legally real",
+      "video": "https://drive.google.com/file/d/13Hst9XZwA8NPV306yFbLqztISlBc7LvG/view",
+      "points": [
         "Registering with your state, step by step",
         "Getting your EIN, and why you need it before the bank",
         "The order these have to happen in",
         "Common filing mistakes that cost weeks"
       ],
-      prompt:"I am registering a non-medical home care business in [state] under the name [name].\n\nWalk me through the registration steps in the correct order at a general level: formation filing, EIN, and any registrations that commonly apply.\n\nFor each step tell me roughly what it costs, how long it usually takes, and what it unlocks. Mark clearly anything I must confirm with my own state, because rules change and I will verify directly.",
-      call:"Do the EIN application live on the call if she has not done it. It takes ten minutes and it is the step people put off longest." },
-
-    { part:"Set It Up", n:5, title:"Open Your Business Bank Account",
-      sub:"Separate your money before your first client",
-      video:"https://drive.google.com/file/d/1KFliZmhkbEaYnmloAzQjLlJKtTun8M1B/view",
-      points:[
+      "prompt": "I am registering a non-medical home care business in [state] under the name [name].\n\nWalk me through the registration steps in the correct order at a general level: formation filing, EIN, and any registrations that commonly apply.\n\nFor each step tell me roughly what it costs, how long it usually takes, and what it unlocks. Mark clearly anything I must confirm with my own state, because rules change and I will verify directly.",
+      "call": "Do the EIN application live on the call if she has not done it. It takes ten minutes and it is the step people put off longest."
+    },
+    {
+      "part": "Set It Up",
+      "n": 5,
+      "title": "Open Your Business Bank Account",
+      "sub": "Separate your money before your first client",
+      "video": "https://drive.google.com/file/d/1KFliZmhkbEaYnmloAzQjLlJKtTun8M1B/view",
+      "points": [
         "What to bring so you are not turned away",
         "Why mixing personal and business money undoes your liability protection",
         "Choosing a bank that will not fight you on a healthcare business",
         "Setting it up so bookkeeping is simple from day one"
       ],
-      prompt:"I have just registered a non-medical home care business in [state] and I need to open a business bank account.\n\nGive me a checklist of what to bring, what to ask the banker, and what account features actually matter for a business that will run payroll and invoice clients.\n\nThen tell me how to set things up from day one so my bookkeeping stays clean.",
-      call:"Make sure she has her filing documents and EIN letter in hand before she goes. Getting turned away at the branch kills momentum." },
-
-    { part:"Run It", n:6, title:"Know Your Numbers",
-      sub:"What it costs, what to charge, and your credit",
-      video:"https://drive.google.com/file/d/1N7YkNnM-PB3IgUo7xKLmBY78OS0Tgc0I/view",
-      points:[
+      "prompt": "I have just registered a non-medical home care business in [state] and I need to open a business bank account.\n\nGive me a checklist of what to bring, what to ask the banker, and what account features actually matter for a business that will run payroll and invoice clients.\n\nThen tell me how to set things up from day one so my bookkeeping stays clean.",
+      "call": "Make sure she has her filing documents and EIN letter in hand before she goes. Getting turned away at the branch kills momentum."
+    },
+    {
+      "part": "Run It",
+      "n": 6,
+      "title": "Know Your Numbers",
+      "sub": "What it costs, what to charge, and your credit",
+      "video": "https://drive.google.com/file/d/1N7YkNnM-PB3IgUo7xKLmBY78OS0Tgc0I/view",
+      "points": [
         "Every startup cost, including the ones people forget",
         "Setting your rate so there is something left after you pay your caregivers",
         "Knowing your break-even before you open",
         "Use 15 . Startup Cost Worksheet and 16 . Rate-Setting Calculator in Assets",
         "Credit and funding: see 22 . Funding Prep Guide"
       ],
-      prompt:"I am opening a non-medical home care business in [state]. I expect to bill around [rate] per hour and pay caregivers around [rate] per hour.\n\nBuild me a simple profit picture: what is left per hour after wages, payroll taxes, insurance and overhead. Then tell me how many billed hours a week I need to cover my costs.\n\nShow the maths so I can change the numbers. Flag which figures I need a real quote for rather than an estimate.",
-      call:"Get her break-even number said out loud. Most people have never worked it out, and it is usually smaller and far less frightening than they assumed." },
-
-    { part:"Run It", n:7, title:"Client Forms & Care",
-      sub:"Intake, agreements, care plans, and proof of service",
-      video:"",
-      points:[
+      "prompt": "I am opening a non-medical home care business in [state]. I expect to bill around [rate] per hour and pay caregivers around [rate] per hour.\n\nBuild me a simple profit picture: what is left per hour after wages, payroll taxes, insurance and overhead. Then tell me how many billed hours a week I need to cover my costs.\n\nShow the maths so I can change the numbers. Flag which figures I need a real quote for rather than an estimate.",
+      "call": "Get her break-even number said out loud. Most people have never worked it out, and it is usually smaller and far less frightening than they assumed."
+    },
+    {
+      "part": "Run It",
+      "n": 7,
+      "title": "Client Forms & Care",
+      "sub": "Intake, agreements, care plans, and proof of service",
+      "video": "",
+      "points": [
         "Intake: everything you need from a client on day one",
         "The service agreement that protects both sides",
         "Care plans your caregivers can actually follow",
         "Visit logs: the document that protects your billing when someone questions it",
         "All six documents are in Assets under Client Forms & Care"
       ],
-      prompt:"I run a non-medical home care business in [state] serving [population]. I have template intake forms, a service agreement, a care plan, a visit log, a transportation agreement and a welcome packet.\n\nAct as an operations reviewer. For each document, tell me what I need to change so it fits my service and my clients instead of being generic. Ask me questions where you need more from me.\n\nThen tell me which order to work through them in, starting with what I would need to take on one single client tomorrow.",
-      call:"Customize one document together on the call. She will do the rest herself once she has watched you do one." },
-
-    { part:"Run It", n:8, title:"Hiring & Staffing",
-      sub:"Finding caregivers, and the paperwork behind each one",
-      video:"",
-      points:[
+      "prompt": "I run a non-medical home care business in [state] serving [population]. I have template intake forms, a service agreement, a care plan, a visit log, a transportation agreement and a welcome packet.\n\nAct as an operations reviewer. For each document, tell me what I need to change so it fits my service and my clients instead of being generic. Ask me questions where you need more from me.\n\nThen tell me which order to work through them in, starting with what I would need to take on one single client tomorrow.",
+      "call": "Customize one document together on the call. She will do the rest herself once she has watched you do one."
+    },
+    {
+      "part": "Run It",
+      "n": 8,
+      "title": "Hiring & Staffing",
+      "sub": "Finding caregivers, and the paperwork behind each one",
+      "video": "",
+      "points": [
         "Screening caregivers properly, and what to ask",
         "Scheduling so you are not living in your phone",
         "What must be in every employee file before anyone inspects it",
         "Onboarding done right on day one",
         "All four documents are in Assets under Staff & Hiring"
       ],
-      prompt:"I am hiring my first caregivers for a non-medical home care business in [state].\n\nGive me a hiring process from advert to first shift: where to find good caregivers, what to screen for, the interview questions that actually predict reliability, and what to check before anyone starts.\n\nThen tell me what is normally kept in an employee file. Flag anything I must confirm with my state or an employment lawyer, because I will verify that directly.",
-      call:"Employment law is where this gets expensive. Tell her plainly to get a payroll provider and to not classify caregivers as contractors because somebody online told her to." },
-
-    { part:"Run It", n:9, title:"Policies, Safety & Compliance",
-      sub:"The part nobody markets, and the part that ends agencies",
-      video:"",
-      points:[
+      "prompt": "I am hiring my first caregivers for a non-medical home care business in [state].\n\nGive me a hiring process from advert to first shift: where to find good caregivers, what to screen for, the interview questions that actually predict reliability, and what to check before anyone starts.\n\nThen tell me what is normally kept in an employee file. Flag anything I must confirm with my state or an employment lawyer, because I will verify that directly.",
+      "call": "Employment law is where this gets expensive. Tell her plainly to get a payroll provider and to not classify caregivers as contractors because somebody online told her to."
+    },
+    {
+      "part": "Run It",
+      "n": 9,
+      "title": "Policies, Safety & Compliance",
+      "sub": "The part nobody markets, and the part that ends agencies",
+      "video": "",
+      "points": [
         "Emergency preparedness and infection control as written policy",
         "Incident reports: same day, every time, no exceptions",
         "Auditing yourself before anyone else does",
         "Preparing for a state inspection",
         "All six documents are in Assets under Policies & Compliance"
       ],
-      prompt:"I run a non-medical home care business in [state]. I have policies covering emergency preparedness, infection control, incident reporting, auditing and inspection prep.\n\nBuild me a simple routine: what I should check weekly, monthly and quarterly to stay on top of compliance, and who in my business is responsible for each.\n\nDo not tell me my state's specific rules or deadlines. I will confirm those with my state directly.",
-      call:"This is the module to tell her what it cost you. Documentation, labour and workers comp. Real numbers land harder than any warning." },
-
-    { part:"Fill It", n:10, title:"Getting Your First Clients",
-      sub:"What to say, and who to say it to",
-      video:"",
-      points:[
+      "prompt": "I run a non-medical home care business in [state]. I have policies covering emergency preparedness, infection control, incident reporting, auditing and inspection prep.\n\nBuild me a simple routine: what I should check weekly, monthly and quarterly to stay on top of compliance, and who in my business is responsible for each.\n\nDo not tell me my state's specific rules or deadlines. I will confirm those with my state directly.",
+      "call": "This is the module to tell her what it cost you. Documentation, labour and workers comp. Real numbers land harder than any warning."
+    },
+    {
+      "part": "Fill It",
+      "n": 10,
+      "title": "Getting Your First Clients",
+      "sub": "What to say, and who to say it to",
+      "video": "",
+      "points": [
         "What to say when a family calls, word for word",
         "Explaining what you do to a referral source in 30 seconds",
         "Who actually controls referrals in your area",
         "Working outreach weekly instead of waiting for the phone",
         "Both scripts are in Assets under Sales & Scripts"
       ],
-      prompt:"I am ready to take clients for my non-medical home care business in [county, state].\n\nBuild me a weekly client acquisition plan: how many outreach contacts, how many follow-ups, which local organisations and people to approach, and what to track. Assume I am still working [hours] a week at a job, so keep it realistic.\n\nThen give me a simple tracker layout: what columns I need to log every conversation and know what to do next.",
-      call:"Set her weekly outreach number together and write it down. Hold her to it on every call after this. This is the module where people quietly stop." }
+      "prompt": "I am ready to take clients for my non-medical home care business in [county, state].\n\nBuild me a weekly client acquisition plan: how many outreach contacts, how many follow-ups, which local organisations and people to approach, and what to track. Assume I am still working [hours] a week at a job, so keep it realistic.\n\nThen give me a simple tracker layout: what columns I need to log every conversation and know what to do next.",
+      "call": "Set her weekly outreach number together and write it down. Hold her to it on every call after this. This is the module where people quietly stop."
+    }
   ],
-
-  /* Group coaching calls only. Empty until the first one is recorded. */
-  recordings: [],
-
-  assets: [
-    { name:"00 . START HERE", cat:"Start Here", ico:"🚩", url:"https://drive.google.com/file/d/10bLBjiIMfWGLSJi5h0YZCn_PWGMDvpOv/view",
-      desc:"Cover, contents and how to work through everything below. Read this first." },
-
-    { name:"01 . Startup Checklist", cat:"Getting Started", ico:"✅", url:"https://drive.google.com/file/d/1tIrjOHGNszYanwHKrceBVc85fm-Ejcnz/view",
-      desc:"The order of operations on one page. Print it and work down it." },
-    { name:"15 . Startup Cost Worksheet", cat:"Getting Started", ico:"🧮", url:"https://drive.google.com/file/d/1dim6o5Wyh-Tqpe5j1Camli7v1psj8T1r/view",
-      desc:"Print version. Every cost before you open the doors." },
-    { name:"15 . Startup Cost Worksheet (Excel)", cat:"Getting Started", ico:"📊", url:"https://drive.google.com/file/d/15c3nzo0PZ-tK6tnLY7To7TF8dQqlqKud/view",
-      desc:"Same worksheet, but it does the maths for you." },
-    { name:"16 . Rate-Setting Calculator", cat:"Getting Started", ico:"💲", url:"https://drive.google.com/file/d/1Db8FfE_cVfREFVj-OChL_KGRN8DK9dX4/view",
-      desc:"Print version. Work out what to charge and what you keep." },
-    { name:"16 . Rate-Setting Calculator (Excel)", cat:"Getting Started", ico:"📈", url:"https://drive.google.com/file/d/1KIJgDqXSLUvXijm5LvJ10HPpBl02UMVq/view",
-      desc:"Change your numbers and watch the margin move." },
-    { name:"22 . Funding Prep Guide", cat:"Getting Started", ico:"🏦", url:"https://drive.google.com/file/d/1Y2TDb0IqczIxYrcKHbnGPDaDQg0KlnBp/view",
-      desc:"What to have ready before you go looking for money." },
-
-    { name:"02 . Client Intake Form", cat:"Client Forms & Care", ico:"📝", url:"https://drive.google.com/file/d/1QvJDrCwuIR-j1eHyPQbxvB5vzZd8_tae/view",
-      desc:"Everything you need from a client on day one." },
-    { name:"07 . Service Agreement", cat:"Client Forms & Care", ico:"🤝", url:"https://drive.google.com/file/d/1js4SkUaxzvz1QrdT0AuwkqgwgVU933AH/view",
-      desc:"What you are providing, what they are paying, in writing." },
-    { name:"08 . Care Plan Template", cat:"Client Forms & Care", ico:"🩺", url:"https://drive.google.com/file/d/13V7jJK1V7daevn4NA8R-fbYbsWHsDfed/view",
-      desc:"The plan of care your caregivers actually work from." },
-    { name:"09 . Visit & Daily Activity Log", cat:"Client Forms & Care", ico:"🗒️", url:"https://drive.google.com/file/d/1iOnrdYHPw7oCobf8W7fns55rWC9oKh3n/view",
-      desc:"Proof of service. This is the document that protects your billing." },
-    { name:"11 . Transportation Agreement", cat:"Client Forms & Care", ico:"🚗", url:"https://drive.google.com/file/d/1GGx-A3xliVytmqSPJPW3z4SflRIj2wma/view",
-      desc:"For anyone moving clients in a vehicle." },
-    { name:"12 . New Client Welcome Packet", cat:"Client Forms & Care", ico:"📦", url:"https://drive.google.com/file/d/1-IMq9b6QXzeG-hi4PUd_9u0EQ9FkGf-E/view",
-      desc:"What you hand a family the day they sign." },
-
-    { name:"03 . Caregiver Application", cat:"Staff & Hiring", ico:"👤", url:"https://drive.google.com/file/d/1gvoXVDxH5XL-ynoxIVJx0hefo3PRs4U1/view",
-      desc:"Application and screening questionnaire in one." },
-    { name:"04 . Weekly Scheduling Template", cat:"Staff & Hiring", ico:"📅", url:"https://drive.google.com/file/d/1NL5p1UI-UeMp7VYB5zmKDHFIQ5k8B5gu/view",
-      desc:"Cover every shift without living in your phone." },
-    { name:"17 . Employee File Checklist", cat:"Staff & Hiring", ico:"🗂️", url:"https://drive.google.com/file/d/1aR6hfrDzZevTVmkvFnsDfVGbu2eS0tRt/view",
-      desc:"What has to be in every employee file before an audit." },
-    { name:"21 . Employee Onboarding Packet", cat:"Staff & Hiring", ico:"📋", url:"https://drive.google.com/file/d/15Tzhv3s48NcbHvZ9F8ezRIrV3IlO5bys/view",
-      desc:"Day one paperwork, done properly." },
-
-    { name:"05 . Emergency Preparedness Plan", cat:"Policies & Compliance", ico:"🚨", url:"https://drive.google.com/file/d/1YqhCRKCYgeSjHtB_TRMHyDXIIWzeXWhA/view",
-      desc:"Required almost everywhere, and asked for first." },
-    { name:"06 . Infection Control Policy", cat:"Policies & Compliance", ico:"🧼", url:"https://drive.google.com/file/d/1x845xXB3TjaghOxgyQoZcZv9U8CykOcW/view",
-      desc:"Standard precautions written as policy." },
-    { name:"10 . Incident Report Form", cat:"Policies & Compliance", ico:"⚠️", url:"https://drive.google.com/file/d/1qDZ8oS7l2U2fPTdhYDw6m-wTR75M5Y2a/view",
-      desc:"Fill it in the same day, every time. No exceptions." },
-    { name:"18 . Audit Checklist", cat:"Policies & Compliance", ico:"🔍", url:"https://drive.google.com/file/d/1oslV7EyNHn3TlAY2vZWMCkV5CYSIlaRV/view",
-      desc:"Run this on yourself quarterly so nobody else has to." },
-    { name:"19 . State Inspection Prep", cat:"Policies & Compliance", ico:"🏛️", url:"https://drive.google.com/file/d/1SNNUvCvE0D7GakvD3eh52ba6dOJRuBOp/view",
-      desc:"What they look at, and what they look at first." },
-    { name:"20 . Compliance Cheat Sheet", cat:"Policies & Compliance", ico:"📌", url:"https://drive.google.com/file/d/1fKU2paSWUbF51SbFf2AJvbPhedtDeK1R/view",
-      desc:"The short version. Pin it above your desk." },
-
-    { name:"13 . Phone Intake Script", cat:"Sales & Scripts", ico:"📞", url:"https://drive.google.com/file/d/1N2QomLWYjP4wADy7Eca27QeQXOQ7v-fv/view",
-      desc:"What to say when a family calls. Word for word." },
-    { name:"14 . Service Pitch Script", cat:"Sales & Scripts", ico:"🎯", url:"https://drive.google.com/file/d/1dcOIjdchielJ-hXuVMEAGIWkrPc4k9q_/view",
-      desc:"How to explain what you do to a referral source in 30 seconds." }
+  "recordings": [],
+  "assets": [
+    {
+      "name": "00 . START HERE",
+      "cat": "Start Here",
+      "ico": "🚩",
+      "url": "https://drive.google.com/file/d/10bLBjiIMfWGLSJi5h0YZCn_PWGMDvpOv/view",
+      "desc": "Cover, contents and how to work through everything below. Read this first."
+    },
+    {
+      "name": "01 . Startup Checklist",
+      "cat": "Getting Started",
+      "ico": "✅",
+      "url": "https://drive.google.com/file/d/1tIrjOHGNszYanwHKrceBVc85fm-Ejcnz/view",
+      "desc": "The order of operations on one page. Print it and work down it."
+    },
+    {
+      "name": "15 . Startup Cost Worksheet",
+      "cat": "Getting Started",
+      "ico": "🧮",
+      "url": "https://drive.google.com/file/d/1dim6o5Wyh-Tqpe5j1Camli7v1psj8T1r/view",
+      "desc": "Print version. Every cost before you open the doors."
+    },
+    {
+      "name": "15 . Startup Cost Worksheet (Excel)",
+      "cat": "Getting Started",
+      "ico": "📊",
+      "url": "https://drive.google.com/file/d/15c3nzo0PZ-tK6tnLY7To7TF8dQqlqKud/view",
+      "desc": "Same worksheet, but it does the maths for you."
+    },
+    {
+      "name": "16 . Rate-Setting Calculator",
+      "cat": "Getting Started",
+      "ico": "💲",
+      "url": "https://drive.google.com/file/d/1Db8FfE_cVfREFVj-OChL_KGRN8DK9dX4/view",
+      "desc": "Print version. Work out what to charge and what you keep."
+    },
+    {
+      "name": "16 . Rate-Setting Calculator (Excel)",
+      "cat": "Getting Started",
+      "ico": "📈",
+      "url": "https://drive.google.com/file/d/1KIJgDqXSLUvXijm5LvJ10HPpBl02UMVq/view",
+      "desc": "Change your numbers and watch the margin move."
+    },
+    {
+      "name": "22 . Funding Prep Guide",
+      "cat": "Getting Started",
+      "ico": "🏦",
+      "url": "https://drive.google.com/file/d/1Y2TDb0IqczIxYrcKHbnGPDaDQg0KlnBp/view",
+      "desc": "What to have ready before you go looking for money."
+    },
+    {
+      "name": "02 . Client Intake Form",
+      "cat": "Client Forms & Care",
+      "ico": "📝",
+      "url": "https://drive.google.com/file/d/1QvJDrCwuIR-j1eHyPQbxvB5vzZd8_tae/view",
+      "desc": "Everything you need from a client on day one."
+    },
+    {
+      "name": "07 . Service Agreement",
+      "cat": "Client Forms & Care",
+      "ico": "🤝",
+      "url": "https://drive.google.com/file/d/1js4SkUaxzvz1QrdT0AuwkqgwgVU933AH/view",
+      "desc": "What you are providing, what they are paying, in writing."
+    },
+    {
+      "name": "08 . Care Plan Template",
+      "cat": "Client Forms & Care",
+      "ico": "🩺",
+      "url": "https://drive.google.com/file/d/13V7jJK1V7daevn4NA8R-fbYbsWHsDfed/view",
+      "desc": "The plan of care your caregivers actually work from."
+    },
+    {
+      "name": "09 . Visit & Daily Activity Log",
+      "cat": "Client Forms & Care",
+      "ico": "🗒️",
+      "url": "https://drive.google.com/file/d/1iOnrdYHPw7oCobf8W7fns55rWC9oKh3n/view",
+      "desc": "Proof of service. This is the document that protects your billing."
+    },
+    {
+      "name": "11 . Transportation Agreement",
+      "cat": "Client Forms & Care",
+      "ico": "🚗",
+      "url": "https://drive.google.com/file/d/1GGx-A3xliVytmqSPJPW3z4SflRIj2wma/view",
+      "desc": "For anyone moving clients in a vehicle."
+    },
+    {
+      "name": "12 . New Client Welcome Packet",
+      "cat": "Client Forms & Care",
+      "ico": "📦",
+      "url": "https://drive.google.com/file/d/1-IMq9b6QXzeG-hi4PUd_9u0EQ9FkGf-E/view",
+      "desc": "What you hand a family the day they sign."
+    },
+    {
+      "name": "03 . Caregiver Application",
+      "cat": "Staff & Hiring",
+      "ico": "👤",
+      "url": "https://drive.google.com/file/d/1gvoXVDxH5XL-ynoxIVJx0hefo3PRs4U1/view",
+      "desc": "Application and screening questionnaire in one."
+    },
+    {
+      "name": "04 . Weekly Scheduling Template",
+      "cat": "Staff & Hiring",
+      "ico": "📅",
+      "url": "https://drive.google.com/file/d/1NL5p1UI-UeMp7VYB5zmKDHFIQ5k8B5gu/view",
+      "desc": "Cover every shift without living in your phone."
+    },
+    {
+      "name": "17 . Employee File Checklist",
+      "cat": "Staff & Hiring",
+      "ico": "🗂️",
+      "url": "https://drive.google.com/file/d/1aR6hfrDzZevTVmkvFnsDfVGbu2eS0tRt/view",
+      "desc": "What has to be in every employee file before an audit."
+    },
+    {
+      "name": "21 . Employee Onboarding Packet",
+      "cat": "Staff & Hiring",
+      "ico": "📋",
+      "url": "https://drive.google.com/file/d/15Tzhv3s48NcbHvZ9F8ezRIrV3IlO5bys/view",
+      "desc": "Day one paperwork, done properly."
+    },
+    {
+      "name": "05 . Emergency Preparedness Plan",
+      "cat": "Policies & Compliance",
+      "ico": "🚨",
+      "url": "https://drive.google.com/file/d/1YqhCRKCYgeSjHtB_TRMHyDXIIWzeXWhA/view",
+      "desc": "Required almost everywhere, and asked for first."
+    },
+    {
+      "name": "06 . Infection Control Policy",
+      "cat": "Policies & Compliance",
+      "ico": "🧼",
+      "url": "https://drive.google.com/file/d/1x845xXB3TjaghOxgyQoZcZv9U8CykOcW/view",
+      "desc": "Standard precautions written as policy."
+    },
+    {
+      "name": "10 . Incident Report Form",
+      "cat": "Policies & Compliance",
+      "ico": "⚠️",
+      "url": "https://drive.google.com/file/d/1qDZ8oS7l2U2fPTdhYDw6m-wTR75M5Y2a/view",
+      "desc": "Fill it in the same day, every time. No exceptions."
+    },
+    {
+      "name": "18 . Audit Checklist",
+      "cat": "Policies & Compliance",
+      "ico": "🔍",
+      "url": "https://drive.google.com/file/d/1oslV7EyNHn3TlAY2vZWMCkV5CYSIlaRV/view",
+      "desc": "Run this on yourself quarterly so nobody else has to."
+    },
+    {
+      "name": "19 . State Inspection Prep",
+      "cat": "Policies & Compliance",
+      "ico": "🏛️",
+      "url": "https://drive.google.com/file/d/1SNNUvCvE0D7GakvD3eh52ba6dOJRuBOp/view",
+      "desc": "What they look at, and what they look at first."
+    },
+    {
+      "name": "20 . Compliance Cheat Sheet",
+      "cat": "Policies & Compliance",
+      "ico": "📌",
+      "url": "https://drive.google.com/file/d/1fKU2paSWUbF51SbFf2AJvbPhedtDeK1R/view",
+      "desc": "The short version. Pin it above your desk."
+    },
+    {
+      "name": "13 . Phone Intake Script",
+      "cat": "Sales & Scripts",
+      "ico": "📞",
+      "url": "https://drive.google.com/file/d/1N2QomLWYjP4wADy7Eca27QeQXOQ7v-fv/view",
+      "desc": "What to say when a family calls. Word for word."
+    },
+    {
+      "name": "14 . Service Pitch Script",
+      "cat": "Sales & Scripts",
+      "ico": "🎯",
+      "url": "https://drive.google.com/file/d/1dcOIjdchielJ-hXuVMEAGIWkrPc4k9q_/view",
+      "desc": "How to explain what you do to a referral source in 30 seconds."
+    }
   ],
-
-  calls: [],
-
-  community: { phone:"", slack:"", booking:"",
-    note:"Support Monday to Wednesday, 10am to 4pm." },
-
-  /* Members you create in admin mode land here.
-     Only a label and a one-way hash of email+password are stored, never the
-     email or the password itself, because this file lives in a public repo. */
-  members: []
+  "calls": [],
+  "community": {
+    "phone": "",
+    "slack": "",
+    "booking": "",
+    "note": "Support Monday to Wednesday, 10am to 4pm."
+  },
+  "members": [
+    {
+      "label": "Saif",
+      "hash": "6e30bc2a0aa75222ad14d9f10db4b3faeccc5ed70cf48df446cf8142d0d29ccf",
+      "added": "2026-09-12T17:06:51.918Z",
+      "done": []
+    }
+  ]
 };
 /* DATA_END */
 </script>
