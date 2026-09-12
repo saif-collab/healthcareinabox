@@ -14,8 +14,6 @@ const CONFIG = {
   KICKER:     "MEMBER PORTAL",
   MARK:       "HB",
   ADMIN_PASS: "health-care in a box admin",
-  PRICE_MAIN: "$597",
-  PRICE_SUB:  "then $47/mo"
 };
 
 /* ==================================================================
@@ -69,27 +67,18 @@ const GITHUB = {
 };
 
 /* ==================================================================
-   WHOP CHECKOUT TEMPLATE
-   To swap the product, change PLAN_ID only. Nothing else.
+   ACCESS
 
-   Where to find it:
-     Whop dashboard  >  your plan  >  Checkout links  >  Embed
-     Copy the value inside  data-whop-checkout-plan-id="plan_XXXXXXX"
+   There is no checkout and no self-signup on this page. Accounts are
+   created by hand in Admin mode > Members, after someone pays you in
+   the DMs. You then send them their email and password.
 
-   Set PLAN_ID to "" at any time to show a placeholder instead.
+   Only a label and a one-way hash of email+password get saved, so no
+   member email or password ever ends up in this public file.
+
+   After creating or revoking an account, hit Publish changes. Until
+   you do, the account only exists in your browser.
    ================================================================== */
-const WHOP = {
-  PLAN_ID:   "plan_qQp6dh6JFhBCJ",
-
-  // Where Whop sends them after paying. Must be THIS page's live URL.
-  // Whop appends ?status=success or ?status=error, and the page reacts to it.
-  // Leave "" and it uses whatever URL the page is currently on.
-  RETURN_URL: "",
-
-  BG:        "#0b0b12",
-  ACCENT:    "#7c5cff",
-  RADIUS:    "14"
-};
 </script>
 
 <!-- ==================================================================
@@ -98,166 +87,203 @@ const WHOP = {
 <script>
 /* DATA_START */
 const DEFAULT_DATA = {
-  "modules": [
-    {
-      "part": "Choose It",
-      "n": 1,
-      "title": "Find Your Lane",
-      "sub": "The six services, and which one is actually yours",
-      "video": "",
-      "points": [
-        "The six non-medical services: home care, medical transportation, adult day, shared living, respite, community integration",
-        "The four filters: your experience, your budget, your state, the population you want to serve",
-        "Why almost everyone defaults to home care, and when that's the wrong call",
-        "Ruling services out on purpose instead of picking by elimination"
+  modules: [
+    { part:"Set It Up", n:1, title:"Why Most People Stay Stuck",
+      sub:"Start here. The reason this usually goes wrong.",
+      video:"https://drive.google.com/file/d/1GBy1Mq9xe0EBtPTy13N-rR5aO41ZVyXD/view",
+      points:[
+        "Why knowing how to care for people is not the same as knowing how to run an agency",
+        "The order everything has to happen in, and what it costs when you get it wrong",
+        "What to stop doing before you spend another dollar",
+        "Read 00 . START HERE in the Assets tab alongside this module"
       ],
-      "prompt": "I have [X] years of experience as a [role] in [setting]. I live in [state], in [county]. I have roughly [$amount] to invest and I want to be earning [$goal] a month. The population I most want to work with is [population].\n\nCompare these six non-medical healthcare services for my situation: home care, non-emergency medical transportation, adult day services, shared living, respite care, community integration.\n\nFor each one tell me: how well it fits my experience, roughly how capital intensive it is to start, whether it needs staff from day one, and who typically pays for it. Then rank them best to worst fit for me and explain the top two in detail.\n\nDo not tell me my state's exact licensing requirements. I will verify those directly with the state.",
-      "call": "Walk through the six services out loud, one at a time, with a real example of who each suits. Then have her say which two she's between and why. Do not let her leave the call without narrowing to two."
-    },
-    {
-      "part": "Choose It",
-      "n": 2,
-      "title": "Validate the Opportunity",
-      "sub": "Who needs it, who pays, who controls the referrals",
-      "video": "",
-      "points": [
-        "Finding out whether there is real demand in your county before you spend anything",
-        "Who pays: private pay, Medicaid, VA, contracts, or a mix",
-        "Who actually controls the referrals, and why that person matters more than your marketing",
-        "Reading local saturation honestly instead of hoping"
+      prompt:"I have [X] years of experience as a [role] in [setting]. I live in [state]. I want to start my own non-medical home care business and I have roughly [$amount] to get going.\n\nBased on that, list the first five things I should do in order, and the five things people in my position usually do first that turn out to be a waste of time or money.\n\nBe blunt. Do not tell me my state's licensing requirements, I will confirm those directly with the state.",
+      call:"Get her to say out loud what she has already spent money on and what she has already tried. That tells you which module she actually needs to start on, and it is rarely module one." },
+
+    { part:"Set It Up", n:2, title:"Name Your Business",
+      sub:"Pick a name you will not have to change later",
+      video:"https://drive.google.com/file/d/1O4kCf1Dn6O_QyxKISNCaUUIQKIqsf6AM/view",
+      points:[
+        "What makes a name brandable instead of forgettable",
+        "Checking the name is actually free before you fall in love with it",
+        "Names that box you into one service when you might add more later",
+        "Matching the name to the population you want to serve"
       ],
-      "prompt": "I'm planning to start a [service] business in [county, state]. My intended population is [population].\n\nHelp me build a validation plan. I want to find out: who in my area needs this service, who pays for it, which organizations or roles control the referrals, how many providers already serve this population locally, and what the realistic private-pay rate range is.\n\nGive me a list of specific places to look and specific people to call, plus the exact questions to ask them. Flag anything I should verify with an official source rather than take from you.",
-      "call": "Have her name three real referral sources in her county by name, not by category. If she can't, that's the homework before the next call."
-    },
-    {
-      "part": "Choose It",
-      "n": 3,
-      "title": "Map the Money",
-      "sub": "Startup costs, pricing, and your break-even client count",
-      "video": "",
-      "points": [
-        "Choosing your payer model and what each one costs you in cash-flow delay",
-        "Real startup costs versus the ones people forget: insurance, software, background checks",
-        "Monthly operating costs before your first dollar comes in",
-        "Break-even: exactly how many clients before this replaces your paycheck"
+      prompt:"I am starting a non-medical home care business in [state], serving [population].\n\nGive me 20 name options. For each one tell me in a few words why it works. Mix warm and personal names with clean professional ones.\n\nAvoid anything that locks me into only one service, anything hard to spell out loud on the phone, and anything that sounds clinical or medical.\n\nThen tell me exactly how to check whether each name is already taken.",
+      call:"Have her shortlist three on the call and check availability live. People stall on naming for weeks if you let them leave without deciding." },
+
+    { part:"Set It Up", n:3, title:"Choose Your Structure",
+      sub:"LLC, sole proprietor, and what the difference actually means",
+      video:"https://drive.google.com/file/d/1a1b2AnuuOKy0KsEzoREhAIsiqdggkzpd/view",
+      points:[
+        "What each structure means for your personal liability",
+        "Why the structure matters more in healthcare than in most businesses",
+        "When a single-member LLC is enough and when it is not",
+        "Getting this right the first time instead of restructuring later"
       ],
-      "prompt": "I'm starting a [service] business in [state]. My payer model will be [private pay / Medicaid / mixed]. I expect to charge [rate] or be reimbursed at roughly [rate].\n\nBuild me a startup and operating budget. Include formation, insurance, software, background checks, marketing, and any staffing I'd need in month one. Then calculate my monthly break-even and how many clients that equals.\n\nShow the math so I can change the numbers myself. Tell me which figures I need to confirm with a real quote rather than an estimate.",
-      "call": "Get her actual break-even number said out loud on the call. Most people have never calculated it and the number is usually far smaller and less frightening than they assumed."
-    },
-    {
-      "part": "Build It",
-      "n": 4,
-      "title": "Build the Foundation",
-      "sub": "Formation, EIN, banking, insurance, in the right order",
-      "video": "",
-      "points": [
-        "Why the LLC is step four and not step one",
-        "Entity choice, EIN, and a business bank account that won't cause problems later",
-        "General liability and professional liability: what referral partners actually ask to see",
-        "The order that means you build once instead of paying twice"
+      prompt:"I am forming a non-medical home care business in [state]. I will be [the only owner / partnering with someone].\n\nExplain the practical differences between the common business structures for a business like mine, in plain English. Focus on liability, tax treatment and paperwork load.\n\nDo not tell me which one to choose and do not give me legal or tax advice. Tell me what questions to ask an attorney or accountant in my state.",
+      call:"This is where partnership questions come up. If she is going in with somebody, that conversation happens now, not after money is involved." },
+
+    { part:"Set It Up", n:4, title:"Register Your Business",
+      sub:"Filing, EIN, and getting legally real",
+      video:"https://drive.google.com/file/d/13Hst9XZwA8NPV306yFbLqztISlBc7LvG/view",
+      points:[
+        "Registering with your state, step by step",
+        "Getting your EIN, and why you need it before the bank",
+        "The order these have to happen in",
+        "Common filing mistakes that cost weeks"
       ],
-      "prompt": "I'm forming a [service] business in [state] and I've already chosen my service and confirmed my payer.\n\nGive me a step-by-step setup checklist in the correct order: entity formation, EIN, business banking, insurance types I'll need, and any registrations that apply to a non-medical healthcare service business.\n\nFor each step tell me what it typically costs, roughly how long it takes, and what it unlocks that I can't do without it. Mark clearly which steps I must confirm with my state or a licensed professional.",
-      "call": "Screen-share and do the first two steps live with her. Momentum on this module is worth more than information."
-    },
-    {
-      "part": "Build It",
-      "n": 5,
-      "title": "Licensing & Compliance",
-      "sub": "Finding and following your state's actual path",
-      "video": "",
-      "points": [
-        "How to find your state's real requirements instead of trusting a Facebook group",
-        "Licence, certification, or neither: it depends entirely on service and state",
-        "Reading an application before you start filling it in",
-        "The most common reasons applications get kicked back"
+      prompt:"I am registering a non-medical home care business in [state] under the name [name].\n\nWalk me through the registration steps in the correct order at a general level: formation filing, EIN, and any registrations that commonly apply.\n\nFor each step tell me roughly what it costs, how long it usually takes, and what it unlocks. Mark clearly anything I must confirm with my own state, because rules change and I will verify directly.",
+      call:"Do the EIN application live on the call if she has not done it. It takes ten minutes and it is the step people put off longest." },
+
+    { part:"Set It Up", n:5, title:"Open Your Business Bank Account",
+      sub:"Separate your money before your first client",
+      video:"https://drive.google.com/file/d/1KFliZmhkbEaYnmloAzQjLlJKtTun8M1B/view",
+      points:[
+        "What to bring so you are not turned away",
+        "Why mixing personal and business money undoes your liability protection",
+        "Choosing a bank that will not fight you on a healthcare business",
+        "Setting it up so bookkeeping is simple from day one"
       ],
-      "prompt": "I'm starting a [service] business in [state]. I need to research the licensing or certification path myself from primary sources.\n\nTell me which types of agency or department typically govern this service, what the application process usually involves at a high level, and what documents are commonly required.\n\nThen give me a script for calling the state agency: who to ask for, what to ask, and how to confirm I've got the right requirements for my exact service. Do not give me specific rules, deadlines or dollar figures for my state. I will get those from the source.",
-      "call": "Do not read state requirements to her from memory. Get her on the phone with her state agency during the call if you can. That single phone call is often the whole module."
-    },
-    {
-      "part": "Build It",
-      "n": 6,
-      "title": "Install the Box",
-      "sub": "Policies, intake, agreements, care plans, systems",
-      "video": "",
-      "points": [
-        "Customizing the document set to your one service instead of using it generic",
-        "Intake forms, client agreements, assessments and care plans",
-        "Employee documents, background checks, onboarding",
-        "Scheduling, documentation and billing: an operating system, not a folder"
+      prompt:"I have just registered a non-medical home care business in [state] and I need to open a business bank account.\n\nGive me a checklist of what to bring, what to ask the banker, and what account features actually matter for a business that will run payroll and invoice clients.\n\nThen tell me how to set things up from day one so my bookkeeping stays clean.",
+      call:"Make sure she has her filing documents and EIN letter in hand before she goes. Getting turned away at the branch kills momentum." },
+
+    { part:"Run It", n:6, title:"Know Your Numbers",
+      sub:"What it costs, what to charge, and your credit",
+      video:"https://drive.google.com/file/d/1N7YkNnM-PB3IgUo7xKLmBY78OS0Tgc0I/view",
+      points:[
+        "Every startup cost, including the ones people forget",
+        "Setting your rate so there is something left after you pay your caregivers",
+        "Knowing your break-even before you open",
+        "Use 15 . Startup Cost Worksheet and 16 . Rate-Setting Calculator in Assets",
+        "Credit and funding: see 22 . Funding Prep Guide"
       ],
-      "prompt": "I run a [service] business in [state] serving [population]. I have a set of template policies, intake forms, client agreements, care plans and employee documents.\n\nAct as an operations reviewer. For each document type, tell me what needs to change to be specific to my service and my population rather than generic. Ask me questions where you need information from me.\n\nThen give me an order to work through them in, starting with the ones I'd need first to take on a single client.",
-      "call": "Pick one document and customize it together on the call. She'll do the other twelve herself once she's seen how one is done."
-    },
-    {
-      "part": "Fill It",
-      "n": 7,
-      "title": "Become Referral-Ready",
-      "sub": "What a case manager needs before they'll place with you",
-      "video": "",
-      "points": [
-        "Your service and population statement in one sentence",
-        "The referral packet and the capacity sheet",
-        "A defined intake process and a response-time standard you actually hold to",
-        "Why response time beats marketing every single time"
+      prompt:"I am opening a non-medical home care business in [state]. I expect to bill around [rate] per hour and pay caregivers around [rate] per hour.\n\nBuild me a simple profit picture: what is left per hour after wages, payroll taxes, insurance and overhead. Then tell me how many billed hours a week I need to cover my costs.\n\nShow the maths so I can change the numbers. Flag which figures I need a real quote for rather than an estimate.",
+      call:"Get her break-even number said out loud. Most people have never worked it out, and it is usually smaller and far less frightening than they assumed." },
+
+    { part:"Run It", n:7, title:"Client Forms & Care",
+      sub:"Intake, agreements, care plans, and proof of service",
+      video:"",
+      points:[
+        "Intake: everything you need from a client on day one",
+        "The service agreement that protects both sides",
+        "Care plans your caregivers can actually follow",
+        "Visit logs: the document that protects your billing when someone questions it",
+        "All six documents are in Assets under Client Forms & Care"
       ],
-      "prompt": "I run a [service] business in [county, state] serving [population]. I have capacity for [number] clients right now.\n\nHelp me build a referral packet. I need: a one-sentence service and population statement, a one-page overview a case manager could scan in 30 seconds, a capacity sheet, my intake process written out, and a response-time commitment.\n\nThen write me three outreach scripts: one for a phone call, one for an in-person drop-in, one for email. Professional, short, no salesy language.",
-      "call": "Have her read her one-sentence statement out loud. If it takes more than one breath, it isn't done."
-    },
-    {
-      "part": "Fill It",
-      "n": 8,
-      "title": "Pursue the First Client",
-      "sub": "A weekly plan, not waiting by the phone",
-      "video": "",
-      "points": [
-        "Building your referral source list and working it weekly",
-        "Outreach, follow-up, and tracking every conversation",
-        "Provider meetings and community events that actually produce referrals",
-        "Refining the offer off real feedback instead of guessing"
+      prompt:"I run a non-medical home care business in [state] serving [population]. I have template intake forms, a service agreement, a care plan, a visit log, a transportation agreement and a welcome packet.\n\nAct as an operations reviewer. For each document, tell me what I need to change so it fits my service and my clients instead of being generic. Ask me questions where you need more from me.\n\nThen tell me which order to work through them in, starting with what I would need to take on one single client tomorrow.",
+      call:"Customize one document together on the call. She will do the rest herself once she has watched you do one." },
+
+    { part:"Run It", n:8, title:"Hiring & Staffing",
+      sub:"Finding caregivers, and the paperwork behind each one",
+      video:"",
+      points:[
+        "Screening caregivers properly, and what to ask",
+        "Scheduling so you are not living in your phone",
+        "What must be in every employee file before anyone inspects it",
+        "Onboarding done right on day one",
+        "All four documents are in Assets under Staff & Hiring"
       ],
-      "prompt": "I'm ready to take clients for my [service] business in [county, state]. My referral sources are [list them].\n\nBuild me a weekly client acquisition plan: how many outreach contacts, how many follow-ups, which events to attend, and what to track. Assume I'm still working [hours] a week at my job, so it has to be realistic.\n\nThen build me a simple tracker layout: what columns I need to log every conversation and know what to do next.",
-      "call": "Set her weekly contact number together and write it down. Then hold her to it on every future call. This is the module where people quietly stop, so accountability matters more than content."
-    }
+      prompt:"I am hiring my first caregivers for a non-medical home care business in [state].\n\nGive me a hiring process from advert to first shift: where to find good caregivers, what to screen for, the interview questions that actually predict reliability, and what to check before anyone starts.\n\nThen tell me what is normally kept in an employee file. Flag anything I must confirm with my state or an employment lawyer, because I will verify that directly.",
+      call:"Employment law is where this gets expensive. Tell her plainly to get a payroll provider and to not classify caregivers as contractors because somebody online told her to." },
+
+    { part:"Run It", n:9, title:"Policies, Safety & Compliance",
+      sub:"The part nobody markets, and the part that ends agencies",
+      video:"",
+      points:[
+        "Emergency preparedness and infection control as written policy",
+        "Incident reports: same day, every time, no exceptions",
+        "Auditing yourself before anyone else does",
+        "Preparing for a state inspection",
+        "All six documents are in Assets under Policies & Compliance"
+      ],
+      prompt:"I run a non-medical home care business in [state]. I have policies covering emergency preparedness, infection control, incident reporting, auditing and inspection prep.\n\nBuild me a simple routine: what I should check weekly, monthly and quarterly to stay on top of compliance, and who in my business is responsible for each.\n\nDo not tell me my state's specific rules or deadlines. I will confirm those with my state directly.",
+      call:"This is the module to tell her what it cost you. Documentation, labour and workers comp. Real numbers land harder than any warning." },
+
+    { part:"Fill It", n:10, title:"Getting Your First Clients",
+      sub:"What to say, and who to say it to",
+      video:"",
+      points:[
+        "What to say when a family calls, word for word",
+        "Explaining what you do to a referral source in 30 seconds",
+        "Who actually controls referrals in your area",
+        "Working outreach weekly instead of waiting for the phone",
+        "Both scripts are in Assets under Sales & Scripts"
+      ],
+      prompt:"I am ready to take clients for my non-medical home care business in [county, state].\n\nBuild me a weekly client acquisition plan: how many outreach contacts, how many follow-ups, which local organisations and people to approach, and what to track. Assume I am still working [hours] a week at a job, so keep it realistic.\n\nThen give me a simple tracker layout: what columns I need to log every conversation and know what to do next.",
+      call:"Set her weekly outreach number together and write it down. Hold her to it on every call after this. This is the module where people quietly stop." }
   ],
-  "recordings": [],
-  "assets": [
-    {
-      "name": "Startup Checklist",
-      "cat": "Start Here",
-      "ico": "✅",
-      "url": "https://www.instagram.com/explore/",
-      "desc": "The order of operations on one page. Print it and work down it."
-    },
-    {
-      "name": "Niche Finder",
-      "cat": "Start Here",
-      "ico": "🧭",
-      "url": "",
-      "desc": "Scores the six services against your experience, budget, state and population."
-    },
-    {
-      "name": "Contracts & Forms Bundle",
-      "cat": "Documents",
-      "ico": "📄",
-      "url": "",
-      "desc": "Policies, intake forms, client agreements, care plans, employee documents."
-    },
-    {
-      "name": "Setup Blueprint",
-      "cat": "Documents",
-      "ico": "🗂️",
-      "url": "",
-      "desc": "The full build sequence: formation through referral ready."
-    }
+
+  /* Group coaching calls only. Empty until the first one is recorded. */
+  recordings: [],
+
+  assets: [
+    { name:"00 . START HERE", cat:"Start Here", ico:"🚩", url:"https://drive.google.com/file/d/10bLBjiIMfWGLSJi5h0YZCn_PWGMDvpOv/view",
+      desc:"Cover, contents and how to work through everything below. Read this first." },
+
+    { name:"01 . Startup Checklist", cat:"Getting Started", ico:"✅", url:"https://drive.google.com/file/d/1tIrjOHGNszYanwHKrceBVc85fm-Ejcnz/view",
+      desc:"The order of operations on one page. Print it and work down it." },
+    { name:"15 . Startup Cost Worksheet", cat:"Getting Started", ico:"🧮", url:"https://drive.google.com/file/d/1dim6o5Wyh-Tqpe5j1Camli7v1psj8T1r/view",
+      desc:"Print version. Every cost before you open the doors." },
+    { name:"15 . Startup Cost Worksheet (Excel)", cat:"Getting Started", ico:"📊", url:"https://drive.google.com/file/d/15c3nzo0PZ-tK6tnLY7To7TF8dQqlqKud/view",
+      desc:"Same worksheet, but it does the maths for you." },
+    { name:"16 . Rate-Setting Calculator", cat:"Getting Started", ico:"💲", url:"https://drive.google.com/file/d/1Db8FfE_cVfREFVj-OChL_KGRN8DK9dX4/view",
+      desc:"Print version. Work out what to charge and what you keep." },
+    { name:"16 . Rate-Setting Calculator (Excel)", cat:"Getting Started", ico:"📈", url:"https://drive.google.com/file/d/1KIJgDqXSLUvXijm5LvJ10HPpBl02UMVq/view",
+      desc:"Change your numbers and watch the margin move." },
+    { name:"22 . Funding Prep Guide", cat:"Getting Started", ico:"🏦", url:"https://drive.google.com/file/d/1Y2TDb0IqczIxYrcKHbnGPDaDQg0KlnBp/view",
+      desc:"What to have ready before you go looking for money." },
+
+    { name:"02 . Client Intake Form", cat:"Client Forms & Care", ico:"📝", url:"https://drive.google.com/file/d/1QvJDrCwuIR-j1eHyPQbxvB5vzZd8_tae/view",
+      desc:"Everything you need from a client on day one." },
+    { name:"07 . Service Agreement", cat:"Client Forms & Care", ico:"🤝", url:"https://drive.google.com/file/d/1js4SkUaxzvz1QrdT0AuwkqgwgVU933AH/view",
+      desc:"What you are providing, what they are paying, in writing." },
+    { name:"08 . Care Plan Template", cat:"Client Forms & Care", ico:"🩺", url:"https://drive.google.com/file/d/13V7jJK1V7daevn4NA8R-fbYbsWHsDfed/view",
+      desc:"The plan of care your caregivers actually work from." },
+    { name:"09 . Visit & Daily Activity Log", cat:"Client Forms & Care", ico:"🗒️", url:"https://drive.google.com/file/d/1iOnrdYHPw7oCobf8W7fns55rWC9oKh3n/view",
+      desc:"Proof of service. This is the document that protects your billing." },
+    { name:"11 . Transportation Agreement", cat:"Client Forms & Care", ico:"🚗", url:"https://drive.google.com/file/d/1GGx-A3xliVytmqSPJPW3z4SflRIj2wma/view",
+      desc:"For anyone moving clients in a vehicle." },
+    { name:"12 . New Client Welcome Packet", cat:"Client Forms & Care", ico:"📦", url:"https://drive.google.com/file/d/1-IMq9b6QXzeG-hi4PUd_9u0EQ9FkGf-E/view",
+      desc:"What you hand a family the day they sign." },
+
+    { name:"03 . Caregiver Application", cat:"Staff & Hiring", ico:"👤", url:"https://drive.google.com/file/d/1gvoXVDxH5XL-ynoxIVJx0hefo3PRs4U1/view",
+      desc:"Application and screening questionnaire in one." },
+    { name:"04 . Weekly Scheduling Template", cat:"Staff & Hiring", ico:"📅", url:"https://drive.google.com/file/d/1NL5p1UI-UeMp7VYB5zmKDHFIQ5k8B5gu/view",
+      desc:"Cover every shift without living in your phone." },
+    { name:"17 . Employee File Checklist", cat:"Staff & Hiring", ico:"🗂️", url:"https://drive.google.com/file/d/1aR6hfrDzZevTVmkvFnsDfVGbu2eS0tRt/view",
+      desc:"What has to be in every employee file before an audit." },
+    { name:"21 . Employee Onboarding Packet", cat:"Staff & Hiring", ico:"📋", url:"https://drive.google.com/file/d/15Tzhv3s48NcbHvZ9F8ezRIrV3IlO5bys/view",
+      desc:"Day one paperwork, done properly." },
+
+    { name:"05 . Emergency Preparedness Plan", cat:"Policies & Compliance", ico:"🚨", url:"https://drive.google.com/file/d/1YqhCRKCYgeSjHtB_TRMHyDXIIWzeXWhA/view",
+      desc:"Required almost everywhere, and asked for first." },
+    { name:"06 . Infection Control Policy", cat:"Policies & Compliance", ico:"🧼", url:"https://drive.google.com/file/d/1x845xXB3TjaghOxgyQoZcZv9U8CykOcW/view",
+      desc:"Standard precautions written as policy." },
+    { name:"10 . Incident Report Form", cat:"Policies & Compliance", ico:"⚠️", url:"https://drive.google.com/file/d/1qDZ8oS7l2U2fPTdhYDw6m-wTR75M5Y2a/view",
+      desc:"Fill it in the same day, every time. No exceptions." },
+    { name:"18 . Audit Checklist", cat:"Policies & Compliance", ico:"🔍", url:"https://drive.google.com/file/d/1oslV7EyNHn3TlAY2vZWMCkV5CYSIlaRV/view",
+      desc:"Run this on yourself quarterly so nobody else has to." },
+    { name:"19 . State Inspection Prep", cat:"Policies & Compliance", ico:"🏛️", url:"https://drive.google.com/file/d/1SNNUvCvE0D7GakvD3eh52ba6dOJRuBOp/view",
+      desc:"What they look at, and what they look at first." },
+    { name:"20 . Compliance Cheat Sheet", cat:"Policies & Compliance", ico:"📌", url:"https://drive.google.com/file/d/1fKU2paSWUbF51SbFf2AJvbPhedtDeK1R/view",
+      desc:"The short version. Pin it above your desk." },
+
+    { name:"13 . Phone Intake Script", cat:"Sales & Scripts", ico:"📞", url:"https://drive.google.com/file/d/1N2QomLWYjP4wADy7Eca27QeQXOQ7v-fv/view",
+      desc:"What to say when a family calls. Word for word." },
+    { name:"14 . Service Pitch Script", cat:"Sales & Scripts", ico:"🎯", url:"https://drive.google.com/file/d/1dcOIjdchielJ-hXuVMEAGIWkrPc4k9q_/view",
+      desc:"How to explain what you do to a referral source in 30 seconds." }
   ],
-  "calls": [],
-  "community": {
-    "phone": "",
-    "slack": "",
-    "booking": "",
-    "note": "Support Monday to Wednesday, 10am to 4pm."
-  }
+
+  calls: [],
+
+  community: { phone:"", slack:"", booking:"",
+    note:"Support Monday to Wednesday, 10am to 4pm." },
+
+  /* Members you create in admin mode land here.
+     Only a label and a one-way hash of email+password are stored, never the
+     email or the password itself, because this file lives in a public repo. */
+  members: []
 };
 /* DATA_END */
 </script>
@@ -359,7 +385,7 @@ textarea.field{min-height:76px;resize:vertical}
   background:rgba(224,168,58,.1);border:1px solid rgba(224,168,58,.32);color:#EBCB90}
 
 /* ================= GATE ================= */
-#gate{min-height:100vh;display:flex;flex-direction:column;padding:0 22px 40px;
+#gate{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 22px;
   background:
     radial-gradient(880px 520px at 12% -12%,rgba(124,92,255,.20),transparent 62%),
     radial-gradient(760px 560px at 108% 108%,rgba(91,63,217,.20),transparent 58%),
@@ -386,8 +412,7 @@ textarea.field{min-height:76px;resize:vertical}
 .incl li i{width:19px;height:19px;flex:0 0 auto;margin-top:2px;border-radius:6px;
   background:rgba(124,92,255,.14);border:1px solid rgba(124,92,255,.34);
   display:grid;place-items:center;font-size:11px;font-style:normal;color:var(--lilac);font-weight:800}
-.priceRow{display:flex;align-items:baseline;gap:10px;margin-top:30px}
-.priceRow b{font-size:38px;font-weight:800;letter-spacing:-1.2px}
+.gbox{width:100%;max-width:400px}
 .gcard{background:linear-gradient(180deg,#15151E,#0F0F16);border:1px solid var(--line2);
   border-radius:20px;padding:24px;position:relative;overflow:hidden;
   box-shadow:0 30px 80px rgba(0,0,0,.5)}
@@ -593,64 +618,20 @@ body.admin .adm.blk{display:flex}
 
 <!-- ================= GATE ================= -->
 <div id="gate">
-  <div class="gwrap">
-    <div class="gtop">
-      <div class="brand">
-        <div class="mark" id="gMark">HB</div>
-        <div class="bt"><b id="gBrand">Healthcare in a Box</b><span id="gKick">Member Portal</span></div>
-      </div>
-      <span class="pill">Enrolment open</span>
+  <div class="gbox up">
+    <div class="brand" style="justify-content:center;margin-bottom:26px">
+      <div class="mark" id="gMark">HB</div>
+      <div class="bt"><b id="gBrand">Healthcare in a Box</b><span id="gKick">Member Portal</span></div>
     </div>
 
-    <div class="gmain">
-      <div class="gleft up">
-        <span class="kicker">For experienced caregivers</span>
-        <h1>Stop guessing which<br>business to build.</h1>
-        <p class="lede">Pick the right non-medical healthcare service for your experience and your state, build it in the correct order, and get ready for your first client.</p>
-        <ul class="incl">
-          <li><i>1</i><span>8 modules across 3 parts, from choosing your lane to signing your first client</span></li>
-          <li><i>2</i><span>Every document: policies, intake forms, agreements, care plans</span></li>
-          <li><i>3</i><span>A 1:1 roadmap call to map your service and your state</span></li>
-          <li><i>4</i><span>Biweekly group coaching, the community, and 1:1 support</span></li>
-        </ul>
-        <div class="priceRow"><b id="pMain">$597</b><span class="muted" id="pSub">then $47/mo</span></div>
-      </div>
-
-      <div class="gcard fx up" style="animation-delay:.08s">
-        <h2>Get access</h2>
-        <p class="ph">Complete enrolment below. Your access code is on the confirmation page.</p>
-        <div id="whopMount"></div>
-        <div id="payNote"></div>
-
-        <div class="sep"><div></div>Already paid?<div></div></div>
-
-        <div class="tabsm">
-          <button id="tabL" class="on" onclick="gtab(1)">Log in</button>
-          <button id="tabS" onclick="gtab(0)">Create account</button>
-        </div>
-
-        <div id="paneL">
-          <div id="eL"></div>
-          <label class="lbl">Email</label>
-          <input class="field" id="liE" type="email" autocomplete="email" placeholder="you@email.com">
-          <label class="lbl">Password</label>
-          <input class="field" id="liP" type="password" autocomplete="current-password" placeholder="••••••••">
-          <div style="height:16px"></div>
-          <button class="btn wide" onclick="doLogin()">Log in</button>
-        </div>
-
-        <div id="paneS" class="hide">
-          <div id="eS"></div>
-          <label class="lbl">Full name</label>
-          <input class="field" id="suN" placeholder="Jane Smith">
-          <label class="lbl">Email</label>
-          <input class="field" id="suE" type="email" placeholder="you@email.com">
-          <label class="lbl">Password</label>
-          <input class="field" id="suP" type="password" placeholder="At least 8 characters">
-          <div style="height:16px"></div>
-          <button class="btn wide" onclick="doSignup()">Create my account</button>
-        </div>
-      </div>
+    <div class="gcard fx">
+      <div id="eL"></div>
+      <label class="lbl">Email</label>
+      <input class="field" id="liE" type="email" autocomplete="email" placeholder="you@email.com">
+      <label class="lbl">Password</label>
+      <input class="field" id="liP" type="password" autocomplete="current-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <div style="height:18px"></div>
+      <button class="btn wide" onclick="doLogin()">Log in</button>
     </div>
 
     <button id="adminLink" onclick="askAdmin()">Admin mode</button>
@@ -671,6 +652,8 @@ body.admin .adm.blk{display:flex}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m10 8 6 4-6 4V8z"/><rect x="3" y="4" width="18" height="16" rx="3"/></svg>Recordings</button>
       <button class="navi" data-t="assets" onclick="go('assets')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/></svg>Assets</button>
+      <button class="navi adm" data-t="members" onclick="go('members')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 20v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M19 11h4M21 9v4"/></svg>Members</button>
       <button class="navi" data-t="community" onclick="go('community')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 7a3 3 0 0 1 0 6M18 20a5 5 0 0 0-2-4"/></svg>Community</button>
     </nav>
@@ -708,27 +691,6 @@ body.admin .adm.blk{display:flex}
 </div>
 
 <div id="modalHost"></div>
-
-<!-- Whop checkout mount: built from the WHOP template above -->
-<script>
-(function(){
-  var m=document.getElementById('whopMount');
-  if(WHOP.PLAN_ID){
-    var d=document.createElement('div');
-    d.setAttribute('data-whop-checkout-plan-id', WHOP.PLAN_ID);
-    d.setAttribute('data-whop-checkout-return-url',
-      WHOP.RETURN_URL || (location.origin + location.pathname));
-    d.setAttribute('data-whop-checkout-theme-background-color', WHOP.BG);
-    d.setAttribute('data-whop-checkout-theme-accent-color', WHOP.ACCENT);
-    d.setAttribute('data-whop-checkout-theme-border-radius', WHOP.RADIUS);
-    m.appendChild(d);
-  } else {
-    m.innerHTML='<div class="payPh"><strong>Checkout goes here</strong>'+
-      'Open this file, find the WHOP block at the top, and paste your plan ID into PLAN_ID.</div>';
-  }
-})();
-</script>
-<script async src="https://js.whop.com/static/checkout/loader.js"></script>
 
 <script>
 /* ================= state ================= */
@@ -808,72 +770,35 @@ async function boot(){
   ['gBrand','aBrand','mBrand'].forEach(i=>document.getElementById(i).textContent=CONFIG.BRAND);
   ['gMark','aMark','mMark'].forEach(i=>document.getElementById(i).textContent=CONFIG.MARK);
   ['gKick','aKick'].forEach(i=>document.getElementById(i).textContent=CONFIG.KICKER);
-  document.getElementById('pMain').textContent=CONFIG.PRICE_MAIN;
-  document.getElementById('pSub').textContent=CONFIG.PRICE_SUB;
   document.title=CONFIG.BRAND;
 
-  await initSB();
-
-  // Whop sends them back here with ?status=success or ?status=error
-  const st=new URLSearchParams(location.search).get('status');
-  const note=document.getElementById('payNote');
-  if(st==='success'){
-    note.className='okbox';
-    note.innerHTML='<b>Payment confirmed.</b> Create your login below and you\'re in.';
-    gtab(0);
-    history.replaceState({},'',location.pathname);
-  } else if(st==='error'){
-    note.className='warnbox';
-    note.innerHTML='That payment didn\'t go through. Try again above, or message us and we\'ll sort it.';
-    history.replaceState({},'',location.pathname);
-  }
-
-  if(cloud()){
-    const {data}=await SB.auth.getSession();
-    if(data&&data.session) return enter(sbUser(data.session.user));
-  } else {
-    const s=ls(K.s); if(s&&s.email){const u=USERS.find(x=>x.email===s.email); if(u)return enter(u);}
+  // stay logged in between visits
+  const s=ls(K.s);
+  if(s&&s.h){
+    const mem=(DATA.members||[]).find(x=>x.hash===s.h);
+    if(mem) return enter({name:mem.label||'Member', email:'', done:mem.done||[]});
+    localStorage.removeItem(K.s); // access was revoked
   }
 }
-function gtab(l){
-  document.getElementById('paneL').classList.toggle('hide',!l);
-  document.getElementById('paneS').classList.toggle('hide',!!l);
-  document.getElementById('tabL').classList.toggle('on',!!l);
-  document.getElementById('tabS').classList.toggle('on',!l);
+/* one-way hash of email+password. the public file only ever holds this. */
+const SALT='hiab.v1.';
+async function credHash(email,pass){
+  const raw=SALT+String(email).trim().toLowerCase()+':'+String(pass);
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(raw));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-async function doSignup(){
-  const e=document.getElementById('eS');e.className='err';e.textContent='';
-  const n=document.getElementById('suN').value.trim(),
-        m=document.getElementById('suE').value.trim().toLowerCase(),
-        p=document.getElementById('suP').value;
-  if(!n)return e.textContent='Add your name.';
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m))return e.textContent="That email doesn't look right.";
-  if(p.length<8)return e.textContent='Password needs at least 8 characters.';
-
-  if(cloud()){
-    const {data,error}=await SB.auth.signUp({email:m,password:p,options:{data:{name:n,done:[]}}});
-    if(error)return e.textContent=error.message;
-    if(!data.session)return e.textContent='Account made. Check your email to confirm, then log in. (Turn off "Confirm email" in Supabase to skip this.)';
-    return enter(sbUser(data.session.user));
-  }
-  if(USERS.some(u=>u.email===m))return e.textContent="There's already an account on that email. Try logging in.";
-  const u={name:n,email:m,pass:p,joined:new Date().toISOString()};
-  USERS.push(u);saveU();localStorage.setItem(K.s,JSON.stringify({email:m}));enter(u);
-}
-
 async function doLogin(){
   const e=document.getElementById('eL');e.className='err';e.textContent='';
   const m=document.getElementById('liE').value.trim().toLowerCase(),
         p=document.getElementById('liP').value;
+  if(!m||!p)return e.textContent='Enter your email and password.';
 
-  if(cloud()){
-    const {data,error}=await SB.auth.signInWithPassword({email:m,password:p});
-    if(error)return e.textContent=error.message;
-    return enter(sbUser(data.user));
-  }
-  const u=USERS.find(x=>x.email===m&&x.pass===p);
-  if(!u)return e.textContent="Those details don't match an account here.";
-  localStorage.setItem(K.s,JSON.stringify({email:m}));enter(u);
+  const h=await credHash(m,p);
+  const mem=(DATA.members||[]).find(x=>x.hash===h);
+  if(!mem)return e.textContent="Those details don't match an account. Check the message we sent you, or DM us and we'll sort it.";
+
+  localStorage.setItem(K.s,JSON.stringify({h}));
+  enter({name:mem.label||'Member', email:m, done:mem.done||[]});
 }
 function askAdmin(){
   modal({title:'Admin mode',help:'Skips checkout and login so you can edit the portal.',
@@ -915,7 +840,7 @@ function render(){
     '</span>'+
     (ghCfg()&&DIRTY>0?'<button onclick="publish(this)">Publish changes</button>':'')+
     '<button onclick="exportData()">Export site data</button><button onclick="logout()">Exit</button></div>';
-  v.innerHTML=bar+({modules:vModules,recordings:vRec,assets:vAssets,community:vComm}[tab])();
+  v.innerHTML=bar+({modules:vModules,recordings:vRec,assets:vAssets,community:vComm,members:vMembers}[tab]||vModules)();
   updProg();
   v.querySelectorAll('.mod,.asset,.cbox,.row').forEach((el,i)=>{
     el.classList.add('up','fx'); el.style.animationDelay=Math.min(i*.035,.3)+'s';
@@ -1020,6 +945,74 @@ function edAsset(i){
     onOk:v=>{if(!v.name)return'Give it a name.';
       const o={name:v.name,cat:v.cat||'Other',ico:v.ico||'📄',url:v.url,desc:v.desc};
       i<0?DATA.assets.push(o):DATA.assets[i]=o;save();render();}});
+}
+
+/* ================= members (admin only) ================= */
+function vMembers(){
+  if(!isAdmin) return head('','Members','Admin only.')+'<div class="empty">Not available.</div>';
+  const M=DATA.members||[];
+  let h=head('Access','Members','You create every account by hand. Nobody can sign themselves up.');
+  h+='<button class="btn sm" style="margin-bottom:16px" onclick="addMember()">+ Create member account</button>';
+  if(!M.length) h+='<div class="empty">No members yet. Create one after someone pays.</div>';
+  else M.forEach((m,i)=>{
+    h+='<div class="row"><div class="rt"><b>'+esc(m.label||'Member')+'</b>'+
+      '<span>added '+esc((m.added||'').slice(0,10))+'</span></div>'+
+      '<button class="btn ghost sm" onclick="delMember('+i+')">Revoke access</button></div>';
+  });
+  h+='<div class="discl"><b>How this stays private.</b> Only a label and a one-way hash of the email and password are saved. '+
+     'The email address and the password are never stored anywhere in this file, so nothing sensitive ends up in the public repo. '+
+     'That also means you cannot look a password up later. If someone loses theirs, revoke the account and create a new one.<br><br>'+
+     '<b>Remember to Publish.</b> A new account only works on the member\'s device after you hit Publish changes.</div>';
+  return h;
+}
+
+function rndPass(){
+  const a='abcdefghijkmnopqrstuvwxyz', n='23456789';
+  const p=c=>c[Math.floor(Math.random()*c.length)];
+  return [0,1,2,3,4,5].map(()=>p(a)).join('')+'-'+[0,1,2,3].map(()=>p(n)).join('');
+}
+
+function addMember(){
+  const pass=rndPass();
+  modal({title:'Create member account',
+    help:'Label is just for you. The email and password below are what you send them.',
+    fields:[
+      {k:'label',l:'Label (e.g. Renee T.)'},
+      {k:'email',l:'Their email'},
+      {k:'pass', l:'Password', val:pass}
+    ],
+    cta:'Create',
+    onOk:v=>{
+      const lab=(v.label||'').trim(), em=(v.email||'').trim().toLowerCase(), pw=(v.pass||'').trim();
+      if(!lab) return 'Give it a label so you know who it is.';
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return 'That email does not look right.';
+      if(pw.length<6) return 'Password needs at least 6 characters.';
+      credHash(em,pw).then(h=>{
+        if((DATA.members||[]).some(x=>x.hash===h)){ toast('That exact email and password already exists.'); return; }
+        DATA.members=DATA.members||[];
+        DATA.members.push({label:lab, hash:h, added:new Date().toISOString(), done:[]});
+        save(); render();
+        setTimeout(()=>showCreds(lab,em,pw),60);
+      });
+    }});
+}
+
+function showCreds(lab,em,pw){
+  const site=location.origin+location.pathname;
+  const txt="You're in. Here's your login for Healthcare in a Box:\n\n"+
+    site+"\n\nEmail: "+em+"\nPassword: "+pw+"\n\nLog in and start with Module 1. Any trouble, just message me.";
+  modal({title:'Account created for '+lab,
+    help:'Copy this and send it to them. This is the only time you will see the password.',
+    fields:[{k:'m',l:'Message to send',val:txt,ta:1}],
+    cta:'Copy and close',
+    onOk:v=>{ navigator.clipboard.writeText(v.m).then(()=>toast('Copied. Now hit Publish changes.')); }});
+}
+
+function delMember(i){
+  const m=DATA.members[i];
+  modal({title:'Revoke access?', help:'This removes '+(m.label||'this member')+'. They will be logged out and cannot get back in. It cannot be undone.',
+    fields:[], cta:'Revoke',
+    onOk:()=>{ DATA.members.splice(i,1); save(); render(); toast('Revoked. Hit Publish changes to make it stick.'); }});
 }
 
 /* ================= community ================= */
