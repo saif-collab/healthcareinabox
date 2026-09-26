@@ -1376,5 +1376,30 @@ function exportData(){
 
 boot();
 </script>
+     <script>
+/* Botpress assistant, loads only after login */
+(function(){
+  var loaded = false;
+  function loadBot(){
+    if (loaded) return;
+    loaded = true;
+    var a = document.createElement('script');
+    a.src = 'https://cdn.botpress.cloud/webchat/v5.0/inject.js';
+    a.onload = function(){
+      var b = document.createElement('script');
+      b.src = 'https://files.bpcontent.cloud/2026/08/17/15/20260817153131-4KGIVYP0.js';
+      b.defer = true;
+      document.body.appendChild(b);
+    };
+    document.body.appendChild(a);
+  }
+  var app = document.getElementById('app');
+  if (!app) return;
+  if (!app.classList.contains('hide')) loadBot();
+  new MutationObserver(function(){
+    if (!app.classList.contains('hide')) loadBot();
+  }).observe(app, { attributes: true, attributeFilter: ['class'] });
+})();
+</script>
 </body>
 </html>
